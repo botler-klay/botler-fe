@@ -23,9 +23,14 @@ export function useWallet() {
     }
   };
 
+  const disconnect = () => {
+    setWallet(undefined);
+  };
+
   return {
     wallet,
     connect,
+    disconnect,
   };
 }
 

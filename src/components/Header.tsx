@@ -3,7 +3,7 @@ import { CYPRESS_NETWORK_VERSION } from "../constants";
 import { useWallet } from "../hooks/useWallet";
 
 export function Header() {
-  const { wallet, connect } = useWallet();
+  const { wallet, connect, disconnect } = useWallet();
 
   const walletBtnText = useMemo(() => {
     if (!wallet) {
@@ -27,7 +27,7 @@ export function Header() {
       }}
     >
       <span>Botler</span>
-      <button onClick={connect}>{walletBtnText}</button>
+      <button onClick={wallet ? disconnect : connect}>{walletBtnText}</button>
     </div>
   );
 }
