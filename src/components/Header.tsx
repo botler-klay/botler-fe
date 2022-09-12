@@ -1,7 +1,21 @@
+import { useMemo } from "react";
+import { CYPRESS_NETWORK_VERSION } from "../constants";
 import { useWallet } from "../hooks/useWallet";
 
 export function Header() {
   const { wallet, connect } = useWallet();
+
+  const walletBtnText = useMemo(() => {
+    if (!wallet) {
+      return "Connect Wallet";
+    }
+
+    if (wallet.networkVersion !== CYPRESS_NETWORK_VERSION) {
+      return "Invalid Network";
+    }
+
+    return wallet.address;
+  }, [wallet]);
 
   return (
     <div
@@ -13,9 +27,7 @@ export function Header() {
       }}
     >
       <span>Botler</span>
-      <button onClick={connect}>
-        {wallet ? wallet.address : "Connect Wallet"}
-      </button>
+      <button onClick={connect}>{walletBtnText}</button>
     </div>
   );
 }

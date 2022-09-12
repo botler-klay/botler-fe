@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { walletAtom } from "../recoil/atoms";
 import { getKaikasProvider } from "../utils/kaikas";
@@ -18,7 +19,6 @@ export function useWallet() {
         networkVersion: provider.networkVersion,
       });
     } catch (error) {
-      // Handle error. Likely the user rejected the login
       console.error(error);
     }
   };
@@ -27,4 +27,24 @@ export function useWallet() {
     wallet,
     connect,
   };
+}
+
+export function useWalletEvent() {
+  const [wallet, setWallet] = useRecoilState(walletAtom);
+
+  useEffect(() => {
+    if (!wallet) return;
+
+    const provider = getKaikasProvider();
+
+    if (!provider) return;
+
+    provider.on("accountsChanged", (accounts: string[]) => {
+      setWallet((prev) => prev && { ...prev, address: accounts[0] });
+    });
+
+    provider.on("networkChanged", (networkVersion: number) => {
+      setWallet((prev) => prev && { ...prev, networkVersion });
+    });
+  }, [setWallet, wallet]);
 }

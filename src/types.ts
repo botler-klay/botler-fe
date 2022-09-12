@@ -1,5 +1,3 @@
-export {};
-
 declare global {
   interface Window {
     klaytn: any;
@@ -8,5 +6,5 @@ declare global {
 
 export interface Wallet {
   address: string;
-  networkVersion: string;
+  networkVersion: number;
 }

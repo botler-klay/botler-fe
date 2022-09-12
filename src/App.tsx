@@ -1,8 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import { Header } from "./components/Header";
+import { useWalletEvent } from "./hooks/useWallet";
 import { JobPage, MainPage, RegisterPage } from "./pages";
 
 function App() {
+  useWalletEvent();
+
   return (
     <>
       <Header />
