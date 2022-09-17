@@ -5,8 +5,8 @@ function fetchJobs() {
     {
       name: "ABC",
       address: "0x123",
-      feeCall: "11.11",
-      accum: "222.22",
+      feePerCall: "11.11",
+      accumFee: "222.22",
       balance: "44.55",
       status: "Active",
     },
@@ -16,5 +16,16 @@ function fetchJobs() {
 export function useJobs() {
   const { data } = useSWR("jobs", fetchJobs);
 
-  return { data };
+  const getJobDetail = (_jid: string) => ({
+    name: "ABC",
+    address: "0x123",
+    feePerCall: "11.11",
+    accumFee: "222.22",
+    balance: "44.55",
+    status: "Active",
+    gas: "1.234",
+    numOfRuns: "5",
+  });
+
+  return { data, getJobDetail };
 }

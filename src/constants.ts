@@ -11,11 +11,11 @@ export const JOBLIST_COLUMNS = [
     Header: "Address",
   },
   {
-    accessor: "feeCall",
+    accessor: "feePerCall",
     Header: "Fee/Call",
   },
   {
-    accessor: "accum",
+    accessor: "accumFee",
     Header: "Accumulated Fee",
   },
   {

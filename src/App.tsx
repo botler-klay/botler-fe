@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { Header } from "./components/Header";
 import { useWalletEvent } from "./hooks/useWallet";
 import { JobPage, MainPage, RegisterPage } from "./pages";
+import { routes } from "./routes";
 
 function App() {
   useWalletEvent();
@@ -10,9 +11,9 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/job/:jid" element={<JobPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path={routes.main} element={<MainPage />} />
+        <Route path={`${routes.job}/:jid`} element={<JobPage />} />
+        <Route path={routes.register} element={<RegisterPage />} />
       </Routes>
     </>
   );
