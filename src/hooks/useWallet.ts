@@ -9,7 +9,7 @@ export function useWallet() {
   const connect = async () => {
     const provider = getKaikasProvider();
 
-    if (!provider) return;
+    if (!provider) return false;
 
     try {
       const accounts = await provider.enable();
@@ -18,8 +18,12 @@ export function useWallet() {
         address: accounts[0],
         networkVersion: provider.networkVersion,
       });
+
+      return true;
     } catch (error) {
       console.error(error);
+
+      return false;
     }
   };
 

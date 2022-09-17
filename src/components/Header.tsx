@@ -1,9 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import ReactModal from "react-modal";
 import { CYPRESS_NETWORK_VERSION } from "../constants";
 import { useWallet } from "../hooks/useWallet";
+import { Row } from "./Layouts";
+import { WalletModalContent } from "./ModalContents/WalletModalContent";
 
 export function Header() {
-  const { wallet, connect, disconnect } = useWallet();
+  const [isOpen, setIsOpen] = useState(false);
+  const { wallet, disconnect } = useWallet();
 
   const walletBtnText = useMemo(() => {
     if (!wallet) {
@@ -18,16 +22,32 @@ export function Header() {
   }, [wallet]);
 
   return (
-    <div
+    <Row
       style={{
-        width: "100%",
         padding: "12px 16px",
-        display: "flex",
         justifyContent: "space-between",
       }}
     >
       <span>Botler</span>
-      <button onClick={wallet ? disconnect : connect}>{walletBtnText}</button>
-    </div>
+      <button onClick={wallet ? disconnect : () => setIsOpen(true)}>
+        {walletBtnText}
+      </button>
+      <ReactModal
+        style={{
+          content: {
+            width: "fit-content",
+            height: "fit-content",
+            left: "50%",
+            transform: "translate(-50%, 0)",
+          },
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+          },
+        }}
+        isOpen={isOpen}
+      >
+        <WalletModalContent close={() => setIsOpen(false)} />
+      </ReactModal>
+    </Row>
   );
 }
