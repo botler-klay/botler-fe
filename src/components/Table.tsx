@@ -1,9 +1,9 @@
-import { useTable, useGlobalFilter, Column, useSortBy } from "react-table";
+import { useTable, Column, useSortBy } from "react-table";
 import { Row } from "./Layouts";
 
 export function Table({ columns, data }: { columns: Column[]; data: {}[] }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data }, useGlobalFilter, useSortBy);
+    useTable({ columns, data }, useSortBy);
 
   return (
     <>
