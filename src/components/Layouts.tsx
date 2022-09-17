@@ -1,4 +1,4 @@
-import { ComponentProps } from "../types";
+import { ComponentProps } from "../types/types";
 
 export function Row({ style, children }: ComponentProps) {
   return (

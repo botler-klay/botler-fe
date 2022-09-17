@@ -1,8 +1,9 @@
-import { useTable, useGlobalFilter, Column } from "react-table";
+import { useTable, useGlobalFilter, Column, useSortBy } from "react-table";
+import { Row } from "./Layouts";
 
 export function Table({ columns, data }: { columns: Column[]; data: {}[] }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data }, useGlobalFilter);
+    useTable({ columns, data }, useGlobalFilter, useSortBy);
 
   return (
     <>
@@ -11,7 +12,12 @@ export function Table({ columns, data }: { columns: Column[]; data: {}[] }) {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <Row style={{ width: "fit-content", gap: 4 }}>
+                    {column.render("Header")}
+                    {column.canSort && <span>⬆︎</span>}
+                  </Row>
+                </th>
               ))}
             </tr>
           ))}

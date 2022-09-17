@@ -9,7 +9,7 @@ export function MainPage() {
 
   return (
     <Column>
-      <Section>
+      <Section style={{ padding: "32px 64px" }}>
         <Row style={{ justifyContent: "space-between" }}>
           <h1>Job List</h1>
           <button>Register new upkeep</button>

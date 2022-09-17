@@ -10,6 +10,14 @@ function fetchJobs() {
       balance: "44.55",
       status: "Active",
     },
+    {
+      name: "DEF",
+      address: "0x456",
+      feePerCall: "3.33",
+      accumFee: "555.55",
+      balance: "24.42",
+      status: "InActive",
+    },
   ];
 }
 
