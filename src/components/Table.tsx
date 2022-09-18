@@ -1,7 +1,25 @@
-import { useTable, Column, useSortBy } from "react-table";
+import {
+  useTable,
+  Column,
+  useSortBy,
+  Row as TableRow,
+  TableRowProps,
+  TableHeaderProps,
+  HeaderGroup,
+} from "react-table";
 import { Row } from "./Layouts";
 
-export function Table({ columns, data }: { columns: Column[]; data: {}[] }) {
+export function Table({
+  columns,
+  data,
+  rowProps,
+  headerProps,
+}: {
+  columns: Column[];
+  data: {}[];
+  rowProps: (row: TableRow<any>) => TableRowProps;
+  headerProps: (header: HeaderGroup<any>) => TableHeaderProps;
+}) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useSortBy);
 
@@ -11,11 +29,15 @@ export function Table({ columns, data }: { columns: Column[]; data: {}[] }) {
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  {...header.getHeaderProps(
+                    header.getSortByToggleProps(headerProps(header))
+                  )}
+                >
                   <Row style={{ width: "fit-content", gap: 4 }}>
-                    {column.render("Header")}
-                    {column.canSort && <span>⬆︎</span>}
+                    {header.render("Header")}
+                    {header.canSort && <span>⬆︎</span>}
                   </Row>
                 </th>
               ))}
@@ -26,7 +48,7 @@ export function Table({ columns, data }: { columns: Column[]; data: {}[] }) {
           {rows.map((row) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr {...row.getRowProps(rowProps(row))}>
                 {row.cells.map((cell) => (
                   <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                 ))}

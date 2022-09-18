@@ -9,7 +9,9 @@ export function JobPage() {
   const { jid } = useParams();
   const { getJobDetail } = useJobs();
 
-  if (!jid) {
+  const jobDetail = getJobDetail(jid);
+
+  if (!jobDetail) {
     navigate(routes.main);
 
     return <></>;
@@ -24,7 +26,7 @@ export function JobPage() {
     status,
     gas,
     numOfRuns,
-  } = getJobDetail(jid);
+  } = jobDetail;
 
   return (
     <Column>

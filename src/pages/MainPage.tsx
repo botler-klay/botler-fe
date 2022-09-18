@@ -1,14 +1,17 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Column, Row } from "../components/Layouts";
 import { Section } from "../components/Section";
 import { Table } from "../components/Table";
 import { JOBLIST_COLUMNS } from "../constants";
 import { useJobs } from "../hooks/useJobs";
 import { useWallet } from "../hooks/useWallet";
+import { routes } from "../routes";
 
 export function MainPage() {
   const { data } = useJobs();
   const { wallet } = useWallet();
+  const navigate = useNavigate();
 
   const [searchStr, setSearchStr] = useState("");
   const [showActiveOnly, setShowActiveOnly] = useState(false);
@@ -91,7 +94,19 @@ export function MainPage() {
               </Row>
             </Row>
           </Column>
-          <Table columns={JOBLIST_COLUMNS} data={filteredData || []} />
+          <Table
+            columns={JOBLIST_COLUMNS}
+            data={filteredData || []}
+            rowProps={(row) => ({
+              key: row.original.jid,
+              onClick: () => navigate(`${routes.job}/${row.original.jid}`),
+              style: { height: 36, cursor: "pointer" },
+            })}
+            headerProps={(header) => ({
+              key: header.id,
+              style: { fontWeight: "bold" },
+            })}
+          />
         </Column>
       </Section>
     </Column>
