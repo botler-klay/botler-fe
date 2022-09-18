@@ -1,3 +1,4 @@
+import { css } from "@emotion/css";
 import {
   useTable,
   Column,
@@ -37,7 +38,9 @@ export function Table({
                 >
                   <Row style={{ width: "fit-content", gap: 4 }}>
                     {header.render("Header")}
-                    {header.canSort && <span>⬆︎</span>}
+                    {header.canSort && (
+                      <span>{header.isSortedDesc ? "∨" : "∧"}</span>
+                    )}
                   </Row>
                 </th>
               ))}
@@ -48,7 +51,14 @@ export function Table({
           {rows.map((row) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps(rowProps(row))}>
+              <tr
+                {...row.getRowProps(rowProps(row))}
+                className={css`
+                  &:hover {
+                    background-color: lightgray;
+                  }
+                `}
+              >
                 {row.cells.map((cell) => (
                   <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                 ))}

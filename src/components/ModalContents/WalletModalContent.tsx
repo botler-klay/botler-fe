@@ -1,4 +1,5 @@
 import { useWallet } from "../../hooks/useWallet";
+import { Button } from "../Button";
 import { Column } from "../Layouts";
 
 export function WalletModalContent({ close }: { close: () => void }) {
@@ -15,7 +16,7 @@ export function WalletModalContent({ close }: { close: () => void }) {
     <Column style={{ width: "fit-content" }}>
       <h2>Connect Wallet</h2>
       <span>You should use Klaytn Cypress Mainnet to connect your wallet.</span>
-      <button onClick={handleConnect}>Kaikas</button>
+      <Button onClick={handleConnect}>Kaikas</Button>
       <button onClick={close}>Close</button>
     </Column>
   );

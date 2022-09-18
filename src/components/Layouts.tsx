@@ -1,26 +1,13 @@
-import { ComponentProps } from "../types/types";
+import styled from "@emotion/styled";
 
-export function Row({ style, children }: ComponentProps) {
-  return (
-    <div
-      style={{ display: "flex", flexDirection: "row", width: "100%", ...style }}
-    >
-      {children}
-    </div>
-  );
-}
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+`;
 
-export function Column({ style, children }: ComponentProps) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+export const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;

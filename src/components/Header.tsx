@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import ReactModal from "react-modal";
 import { CYPRESS_NETWORK_VERSION } from "../constants";
 import { useWallet } from "../hooks/useWallet";
+import { Button } from "./Button";
 import { Row } from "./Layouts";
 import { WalletModalContent } from "./ModalContents/WalletModalContent";
 
@@ -29,9 +30,9 @@ export function Header() {
       }}
     >
       <span>Botler</span>
-      <button onClick={wallet ? disconnect : () => setIsOpen(true)}>
+      <Button onClick={wallet ? disconnect : () => setIsOpen(true)}>
         {walletBtnText}
-      </button>
+      </Button>
       <ReactModal
         style={{
           content: {

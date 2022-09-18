@@ -1,16 +1,7 @@
-import { ComponentProps } from "../types/types";
+import styled from "@emotion/styled";
 
-export function Section({ style, children }: ComponentProps) {
-  return (
-    <section
-      style={{
-        display: "flex",
-        width: "100%",
-        padding: "0 64px",
-        ...style,
-      }}
-    >
-      {children}
-    </section>
-  );
-}
+export const Section = styled.section`
+  display: flex;
+  width: 100%;
+  padding: 0 64px;
+`;
