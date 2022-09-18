@@ -1,5 +1,9 @@
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "../components/Button";
 import { Column, Row } from "../components/Layouts";
+import { Modal } from "../components/Modal";
+import { BalanceModalContent } from "../components/ModalContents/BalanceModalContent";
 import { Section } from "../components/Section";
 import { useJobs } from "../hooks/useJobs";
 import { routes } from "../routes";
@@ -8,6 +12,8 @@ export function JobPage() {
   const navigate = useNavigate();
   const { jid } = useParams();
   const { getJobDetail } = useJobs();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const jobDetail = getJobDetail(jid);
 
@@ -24,7 +30,7 @@ export function JobPage() {
     accumFee,
     balance,
     status,
-    gas,
+    description,
     numOfRuns,
   } = jobDetail;
 
@@ -41,6 +47,7 @@ export function JobPage() {
             position: "relative",
             padding: 32,
             boxShadow: "0px 0px 17px rgba(0, 0, 0, 0.1)",
+            gap: 8,
           }}
         >
           <Row style={{ gap: 16 }}>
@@ -51,13 +58,27 @@ export function JobPage() {
             <span>Job Address</span>
             <span>{address}</span>
           </Row>
-          <Row style={{ gap: 16 }}>
-            <span>Balance</span>
-            <span>{balance}</span>
+          <Row style={{ justifyContent: "space-between" }}>
+            <Row style={{ gap: 16, width: "fit-content" }}>
+              <span>Balance</span>
+              <span>{balance}</span>
+            </Row>
+            <Button onClick={() => setIsOpen(true)}>Add/Withdraw</Button>
+            <Modal isOpen={isOpen}>
+              <BalanceModalContent
+                close={() => setIsOpen(false)}
+                balance={jobDetail.balance}
+              />
+            </Modal>
           </Row>
+          <Row
+            style={{ margin: "16px 0", height: 0.5, backgroundColor: "gray" }}
+          />
           <Row style={{ gap: 16 }}>
-            <span>Job ID</span>
-            <span>{jid}</span>
+            <span>Description</span>
+            <span style={{ width: "85%", whiteSpace: "normal" }}>
+              {description}
+            </span>
           </Row>
           <Row style={{ gap: 16 }}>
             <span>Fee per Call</span>
@@ -68,14 +89,17 @@ export function JobPage() {
             <span>{accumFee}</span>
           </Row>
           <Row style={{ gap: 16 }}>
-            <span>Expected Gas</span>
-            <span>{gas}</span>
-          </Row>
-          <Row style={{ gap: 16 }}>
             <span>Number of Runs</span>
             <span>{numOfRuns}</span>
           </Row>
-          <button style={{ position: "absolute", bottom: 32, right: 32 }}>
+          <button
+            style={{
+              marginTop: 16,
+              lineHeight: "16px",
+              width: "fit-content",
+              borderBottom: "1px solid black",
+            }}
+          >
             {status === "Active" ? "Inactivate Job" : "Activate Job"}
           </button>
         </Column>

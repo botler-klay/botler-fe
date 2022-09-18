@@ -1,14 +1,17 @@
 import { useMemo, useState } from "react";
-import ReactModal from "react-modal";
+import { useNavigate } from "react-router-dom";
 import { CYPRESS_NETWORK_VERSION } from "../constants";
 import { useWallet } from "../hooks/useWallet";
+import { routes } from "../routes";
 import { Button } from "./Button";
 import { Row } from "./Layouts";
+import { Modal } from "./Modal";
 import { WalletModalContent } from "./ModalContents/WalletModalContent";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { wallet, disconnect } = useWallet();
+  const navigate = useNavigate();
 
   const walletBtnText = useMemo(() => {
     if (!wallet) {
@@ -29,26 +32,19 @@ export function Header() {
         justifyContent: "space-between",
       }}
     >
-      <span>Botler</span>
+      <Row style={{ gap: 32, width: "fit-content" }}>
+        <span style={{ fontSize: 24, fontWeight: "bold" }}>Botler</span>
+        <Row style={{ gap: 16, width: "fit-content" }}>
+          <button onClick={() => navigate(routes.main)}>Jobs</button>
+          <button>Rewards</button>
+        </Row>
+      </Row>
       <Button onClick={wallet ? disconnect : () => setIsOpen(true)}>
         {walletBtnText}
       </Button>
-      <ReactModal
-        style={{
-          content: {
-            width: "fit-content",
-            height: "fit-content",
-            left: "50%",
-            transform: "translate(-50%, 0)",
-          },
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.75)",
-          },
-        }}
-        isOpen={isOpen}
-      >
+      <Modal isOpen={isOpen}>
         <WalletModalContent close={() => setIsOpen(false)} />
-      </ReactModal>
+      </Modal>
     </Row>
   );
 }

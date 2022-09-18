@@ -11,7 +11,8 @@ function fetchJobs() {
       balance: "44.55",
       status: "Active",
       owner: "0x373e13B3B55D86B48cf6A5F3464942140f1E1486",
-      gas: "100000",
+      description:
+        "Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello",
       numOfRuns: 3,
     },
     {
@@ -23,7 +24,8 @@ function fetchJobs() {
       balance: "24.42",
       status: "InActive",
       owner: "0xabcdef",
-      gas: "100000",
+      description:
+        "Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello",
       numOfRuns: 3,
     },
     {
@@ -35,7 +37,8 @@ function fetchJobs() {
       balance: "1212.21",
       status: "InActive",
       owner: "0x373e13B3B55D86B48cf6A5F3464942140f1E1486",
-      gas: "100000",
+      description:
+        "Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello",
       numOfRuns: 3,
     },
     {
@@ -47,7 +50,8 @@ function fetchJobs() {
       balance: "4849.311",
       status: "Active",
       owner: "0x098098089",
-      gas: "100000",
+      description:
+        "Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello",
       numOfRuns: 3,
     },
   ];
