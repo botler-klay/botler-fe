@@ -53,7 +53,9 @@ export function MainPage() {
       <Section style={{ padding: "32px 64px" }}>
         <Row style={{ justifyContent: "space-between" }}>
           <h1>Job List</h1>
-          <Button>Register Job</Button>
+          <Button onClick={() => navigate(routes.register)}>
+            Register Job
+          </Button>
         </Row>
       </Section>
       <Section>
