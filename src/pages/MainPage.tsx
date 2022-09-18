@@ -4,22 +4,43 @@ import { Section } from "../components/Section";
 import { Table } from "../components/Table";
 import { JOBLIST_COLUMNS } from "../constants";
 import { useJobs } from "../hooks/useJobs";
+import { useWallet } from "../hooks/useWallet";
 
 export function MainPage() {
   const { data } = useJobs();
+  const { wallet } = useWallet();
 
   const [searchStr, setSearchStr] = useState("");
+  const [showActiveOnly, setShowActiveOnly] = useState(false);
+  const [showMyJobOnly, setShowMyJobOnly] = useState(false);
 
-  const searchedData = useMemo(() => {
-    if (!searchStr || !data) return data;
+  const filteredData = useMemo(() => {
+    if (!data) return [];
 
-    const lc = searchStr.toLowerCase();
+    let result = [...data];
 
-    return data.filter(
-      (job) =>
-        job.address.toLowerCase() === lc || job.name.toLowerCase().includes(lc)
-    );
-  }, [data, searchStr]);
+    if (searchStr) {
+      const lc = searchStr.toLowerCase();
+
+      result = result.filter(
+        (job) =>
+          job.address.toLowerCase() === lc ||
+          job.name.toLowerCase().includes(lc)
+      );
+    }
+
+    if (showActiveOnly) {
+      result = result.filter((job) => job.status === "Active");
+    }
+
+    if (showMyJobOnly && wallet) {
+      result = result.filter(
+        (job) => job.owner.toLowerCase() === wallet.address.toLowerCase()
+      );
+    }
+
+    return result;
+  }, [data, searchStr, showActiveOnly, wallet, showMyJobOnly]);
 
   return (
     <Column>
@@ -38,16 +59,39 @@ export function MainPage() {
           <Column>
             <Row style={{ justifyContent: "space-between" }}>
               <Row style={{ width: "fit-content" }}>
-                <button>All jobs</button>
-                <button>My Jobs</button>
+                <button
+                  onClick={() => setShowMyJobOnly(false)}
+                  style={{ fontWeight: showMyJobOnly ? "normal" : "bold" }}
+                >
+                  All jobs
+                </button>
+                <button
+                  onClick={() => setShowMyJobOnly(true)}
+                  style={{
+                    fontWeight: showMyJobOnly ? "bold" : "normal",
+                    cursor: wallet ? "pointer" : "not-allowed",
+                  }}
+                  disabled={!wallet}
+                >
+                  My Jobs
+                </button>
               </Row>
               <Row style={{ width: "fit-content" }}>
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  checked={showActiveOnly}
+                  onChange={() =>
+                    setShowActiveOnly((prev) => {
+                      console.log(prev);
+                      return !prev;
+                    })
+                  }
+                />
                 <span>Show only activated jobs</span>
               </Row>
             </Row>
           </Column>
-          <Table columns={JOBLIST_COLUMNS} data={searchedData || []} />
+          <Table columns={JOBLIST_COLUMNS} data={filteredData || []} />
         </Column>
       </Section>
     </Column>
