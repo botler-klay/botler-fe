@@ -1299,11 +1299,6 @@
     "@emotion/use-insertion-effect-with-fallbacks" "^1.0.0"
     "@emotion/utils" "^1.2.0"
 
-"@emotion/types@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@emotion/types/-/types-0.7.0.tgz#204e4c907ff61b034fa0b07b8c7516985f6f740e"
-  integrity sha512-hElIlit2hOhKye6WheMYPLmCwbDoqXDmy/dGUgBjtfqPbQGu0nbCRtCidKKQUGRZOlnE5A+wnyJwpCkb9XNkfQ==
-
 "@emotion/unitless@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.8.0.tgz#a4a36e9cbdc6903737cd20d38033241e1b8833db"
