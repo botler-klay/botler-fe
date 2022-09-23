@@ -10,6 +10,7 @@ export function JobCard({ job }: { job: Job }) {
 
   return (
     <Column
+      as="button"
       onClick={() => navigate(`${routes.job}/${job.jid}`)}
       className={css`
         height: 240px;
@@ -18,11 +19,16 @@ export function JobCard({ job }: { job: Job }) {
         color: #d8d8d8;
         font-size: 12px;
         justify-content: space-between;
+        text-align: start;
+        border-top: 4px solid ${job.status === "Active" ? "#1564FF" : "#A7A7A7"};
+
+        &:hover {
+          border-top: unset;
+          background: ${job.status === "Active"
+            ? "linear-gradient(233.32deg, #1564FF -27.79%, #0B0B0B 87.01%)"
+            : "linear-gradient(233.7deg, #A7A7A7 5.84%, #0B0B0B 88.94%)"};
+        }
       `}
-      style={{
-        borderTop: "4px solid transparent",
-        borderColor: job.status === "Active" ? "#1564FF" : "#A7A7A7",
-      }}
     >
       <Column>
         <h2
