@@ -1,47 +1,101 @@
+import { css } from "@emotion/css";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CYPRESS_NETWORK_VERSION } from "../constants";
+import { useLocation, useNavigate } from "react-router-dom";
+import { BAOBAB_NETWORK_VERSION, CYPRESS_NETWORK_VERSION } from "../constants";
 import { useWallet } from "../hooks/useWallet";
 import { routes } from "../routes";
-import { Button } from "./Button";
 import { Row } from "./Layouts";
 import { Modal } from "./Modal";
 import { WalletModalContent } from "./ModalContents/WalletModalContent";
-
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { wallet, disconnect } = useWallet();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const walletBtnText = useMemo(() => {
     if (!wallet) {
       return "Connect Wallet";
     }
 
-    if (wallet.networkVersion !== CYPRESS_NETWORK_VERSION) {
+    if (wallet.networkVersion !== BAOBAB_NETWORK_VERSION) {
       return "Invalid Network";
     }
 
-    return wallet.address;
+    return "Disconnect";
   }, [wallet]);
 
   return (
     <Row
       style={{
-        padding: "12px 16px",
+        padding: "24px 64px",
         justifyContent: "space-between",
       }}
     >
-      <Row style={{ gap: 32, width: "fit-content" }}>
-        <span style={{ fontSize: 24, fontWeight: "bold" }}>Botler</span>
-        <Row style={{ gap: 16, width: "fit-content" }}>
-          <button onClick={() => navigate(routes.main)}>Jobs</button>
-          <button>Rewards</button>
+      <Row style={{ gap: 40, width: "fit-content", alignItems: "center" }}>
+        <img
+          src="/assets/images/logo.svg"
+          alt="Botler"
+          style={{ width: 100, height: 20 }}
+        />
+        <Row style={{ gap: 36, width: "fit-content", fontSize: 14 }}>
+          <button
+            style={{
+              color:
+                routes.main === location.pathname ||
+                location.pathname.includes(routes.job)
+                  ? "#1564ff"
+                  : "#a7a7a7",
+            }}
+            onClick={() =>
+              location.pathname !== routes.main && navigate(routes.main)
+            }
+          >
+            Jobs
+          </button>
+          <button
+            style={{
+              color:
+                location.pathname === routes.rewards ? "#1564ff" : "#a7a7a7",
+            }}
+            onClick={() =>
+              location.pathname !== routes.rewards && navigate(routes.rewards)
+            }
+          >
+            Rewards
+          </button>
         </Row>
       </Row>
-      <Button onClick={wallet ? disconnect : () => setIsOpen(true)}>
-        {walletBtnText}
-      </Button>
+      <Row style={{ width: "fit-content", gap: 24, alignItems: "center" }}>
+        {wallet && (
+          <button
+            className={css`
+              color: white;
+              font-size: 14px;
+              line-height: 14px;
+              border-bottom: 1px solid white;
+              height: fit-content;
+            `}
+          >
+            {wallet.address.substring(0, 6)}...
+            {wallet.address.substring(
+              wallet.address.length - 4,
+              wallet.address.length
+            )}
+          </button>
+        )}
+        <button
+          className={css`
+            background: #282a34;
+            border-radius: 10px;
+            color: #d8d8d8;
+            padding: 8px 18px;
+          `}
+          onClick={wallet ? disconnect : () => setIsOpen(true)}
+        >
+          {walletBtnText}
+        </button>
+      </Row>
       <Modal isOpen={isOpen}>
         <WalletModalContent close={() => setIsOpen(false)} />
       </Modal>

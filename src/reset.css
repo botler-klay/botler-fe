@@ -37,10 +37,17 @@ button {
   border: 0;
   cursor: pointer;
 }
+button:disabled {
+  cursor: not-allowed;
+}
 a {
   text-decoration: none;
 }
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
