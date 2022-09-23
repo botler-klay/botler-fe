@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 import { ChangeEvent, useState } from "react";
 import { useBalance } from "../../hooks/useBalance";
 import { formatTokenAmount } from "../../utils/bignumber";
-import { Button, PrimaryButton } from "../Button";
+import { PrimaryButton } from "../Button";
 import { Column, Row } from "../Layouts";
 
 const boxCSS = css`

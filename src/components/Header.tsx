@@ -1,7 +1,7 @@
 import { css } from "@emotion/css";
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BAOBAB_NETWORK_VERSION, CYPRESS_NETWORK_VERSION } from "../constants";
+import { BAOBAB_NETWORK_VERSION } from "../constants";
 import { useWallet } from "../hooks/useWallet";
 import { routes } from "../routes";
 import { Row } from "./Layouts";
