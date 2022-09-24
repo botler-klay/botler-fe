@@ -41,14 +41,12 @@ export function Header() {
         <Row style={{ gap: 36, width: "fit-content", fontSize: 14 }}>
           <button
             style={{
-              color:
-                routes.main === location.pathname ||
-                location.pathname.includes(routes.job)
-                  ? "#1564ff"
-                  : "#a7a7a7",
+              color: location.pathname.includes(routes.jobs)
+                ? "#1564ff"
+                : "#a7a7a7",
             }}
             onClick={() =>
-              location.pathname !== routes.main && navigate(routes.main)
+              location.pathname !== routes.jobs && navigate(routes.jobs)
             }
           >
             Jobs

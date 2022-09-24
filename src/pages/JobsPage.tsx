@@ -12,7 +12,7 @@ import { useWallet } from "../hooks/useWallet";
 import { routes } from "../routes";
 import { compareBigNumber } from "../utils/bignumber";
 
-export function MainPage() {
+export function JobsPage() {
   const { data } = useJobs();
   const { wallet } = useWallet();
   const navigate = useNavigate();
@@ -135,7 +135,7 @@ export function MainPage() {
             </Row>
           </Column>
           <img
-            src="/assets/images/mainPageCharacter.svg"
+            src="/assets/images/jobsPageCharacter.svg"
             alt=""
             className={css`
               width: 360px;

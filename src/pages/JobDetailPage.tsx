@@ -31,7 +31,7 @@ const rowValueTextCSS = css`
   color: #cacaca;
 `;
 
-export function JobPage() {
+export function JobDetailPage() {
   const navigate = useNavigate();
   const { jid } = useParams();
   const { getJobDetail } = useJobs();
@@ -42,7 +42,7 @@ export function JobPage() {
   const jobDetail = getJobDetail(jid);
 
   if (!jobDetail) {
-    navigate(routes.main);
+    navigate(routes.jobs);
 
     return <></>;
   }
@@ -161,7 +161,7 @@ export function JobPage() {
             {status === "Active" ? "Inactivate Job" : "Activate Job"}
           </button>
           <img
-            src="/assets/images/jobPageCharacter.svg"
+            src="/assets/images/jobDetailPageCharacter.svg"
             alt=""
             width={280}
             className={css`

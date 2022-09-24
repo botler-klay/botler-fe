@@ -1,6 +1,6 @@
 export const routes = {
-  main: "/",
-  job: "/job",
-  register: "/register",
+  jobs: "/jobs",
+  job: "/jobs/detail",
+  register: "/jobs/register",
   rewards: "/rewards",
 };
