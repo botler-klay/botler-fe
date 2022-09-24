@@ -30,6 +30,7 @@ export function Header() {
       style={{
         padding: "24px 64px",
         justifyContent: "space-between",
+        marginBottom: 32,
       }}
     >
       <Row style={{ gap: 40, width: "fit-content", alignItems: "center" }}>

@@ -59,120 +59,115 @@ export function JobDetailPage() {
   } = jobDetail;
 
   return (
-    <Column>
-      <Section style={{ padding: "32px 64px" }}></Section>
-      <Section>
-        <Column
-          style={{
-            position: "relative",
-            padding: "70px 80px",
-            boxShadow: "0px 0px 17px rgba(0, 0, 0, 0.1)",
-            background:
-              "linear-gradient(233.91deg, #1B1B1B 5.86%, #0C0C0C 94.3%)",
-            gap: 18,
-            fontSize: 14,
-            height: "fit-content",
-          }}
-        >
-          <Row>
-            <h1 className={titleTextCSS}>Job {name}</h1>
-          </Row>
-          <Row style={{ gap: 16 }}>
-            <span className={rowTitleTextCSS}>Status</span>
-            <span className={rowValueTextCSS}>{status}</span>
-          </Row>
-          <Row style={{ gap: 16 }}>
-            <span className={rowTitleTextCSS}>Job Address</span>
-            <button onClick={() => navigator.clipboard.writeText(address)}>
-              <Row style={{ gap: 8 }}>
-                <span
-                  className={rowValueTextCSS}
-                  style={{ borderBottom: "1px solid #cacaca" }}
-                >
-                  {address}
-                </span>
-                <img src="/assets/images/copy.svg" alt="copy" width={10} />
-              </Row>
-            </button>
-          </Row>
-          <Row style={{ justifyContent: "space-between" }}>
-            <Row style={{ gap: 16, width: "fit-content" }}>
-              <span className={rowTitleTextCSS}>Balance</span>
-              <span className={rowValueTextCSS}>
-                {formatTokenAmount(balance)}
+    <Section style={{ marginTop: 32 }}>
+      <Column
+        style={{
+          position: "relative",
+          padding: "70px 80px",
+          boxShadow: "0px 0px 17px rgba(0, 0, 0, 0.1)",
+          background:
+            "linear-gradient(233.91deg, #1B1B1B 5.86%, #0C0C0C 94.3%)",
+          gap: 18,
+          fontSize: 14,
+          height: "fit-content",
+        }}
+      >
+        <Row>
+          <h1 className={titleTextCSS}>Job {name}</h1>
+        </Row>
+        <Row style={{ gap: 16 }}>
+          <span className={rowTitleTextCSS}>Status</span>
+          <span className={rowValueTextCSS}>{status}</span>
+        </Row>
+        <Row style={{ gap: 16 }}>
+          <span className={rowTitleTextCSS}>Job Address</span>
+          <button onClick={() => navigator.clipboard.writeText(address)}>
+            <Row style={{ gap: 8 }}>
+              <span
+                className={rowValueTextCSS}
+                style={{ borderBottom: "1px solid #cacaca" }}
+              >
+                {address}
               </span>
+              <img src="/assets/images/copy.svg" alt="copy" width={10} />
             </Row>
-            <button
-              className={css`
-                border: 1px solid #1564ff;
-                color: #1564ff;
-                padding: 6px 14px;
-              `}
-              onClick={() => setIsOpen(true)}
-              disabled={!wallet}
-            >
-              Add/Withdraw
-            </button>
-            <Modal isOpen={isOpen}>
-              <BalanceModalContent
-                close={() => setIsOpen(false)}
-                balance={jobDetail.balance}
-              />
-            </Modal>
-          </Row>
-          <Row
-            style={{ margin: "16px 0", height: 0.5, backgroundColor: "gray" }}
-          />
-          <Row style={{ gap: 16 }}>
-            <span className={rowTitleTextCSS}>Description</span>
-            <span
-              className={rowValueTextCSS}
-              style={{ width: "85%", whiteSpace: "normal" }}
-            >
-              {description}
-            </span>
-          </Row>
-          <Row style={{ gap: 16 }}>
-            <span className={rowTitleTextCSS}>Fee per Call</span>
+          </button>
+        </Row>
+        <Row style={{ justifyContent: "space-between" }}>
+          <Row style={{ gap: 16, width: "fit-content" }}>
+            <span className={rowTitleTextCSS}>Balance</span>
             <span className={rowValueTextCSS}>
-              {formatTokenAmount(feePerCall)}
+              {formatTokenAmount(balance)}
             </span>
-          </Row>
-          <Row style={{ gap: 16 }}>
-            <span className={rowTitleTextCSS}>Accumulated Fee</span>
-            <span className={rowValueTextCSS}>
-              {formatTokenAmount(accumFee)}
-            </span>
-          </Row>
-          <Row style={{ gap: 16 }}>
-            <span className={rowTitleTextCSS}>Number of Runs</span>
-            <span className={rowValueTextCSS}>{numOfRuns}</span>
           </Row>
           <button
-            style={{
-              marginTop: 16,
-              fontSize: "14px",
-              lineHeight: "14px",
-              width: "fit-content",
-              color: "#D8405B",
-              borderBottom: "1px solid #D8405B",
-            }}
-          >
-            {status === "Active" ? "Inactivate Job" : "Activate Job"}
-          </button>
-          <img
-            src="/assets/images/jobDetailPageCharacter.svg"
-            alt=""
-            width={280}
             className={css`
-              position: absolute;
-              right: 0;
-              bottom: 0;
-              transform: translate(30%, 30%);
+              border: 1px solid #1564ff;
+              color: #1564ff;
+              padding: 6px 14px;
             `}
-          />
-        </Column>
-      </Section>
-    </Column>
+            onClick={() => setIsOpen(true)}
+            disabled={!wallet}
+          >
+            Add/Withdraw
+          </button>
+          <Modal isOpen={isOpen}>
+            <BalanceModalContent
+              close={() => setIsOpen(false)}
+              balance={jobDetail.balance}
+            />
+          </Modal>
+        </Row>
+        <Row
+          style={{ margin: "16px 0", height: 0.5, backgroundColor: "gray" }}
+        />
+        <Row style={{ gap: 16 }}>
+          <span className={rowTitleTextCSS}>Description</span>
+          <span
+            className={rowValueTextCSS}
+            style={{ width: "85%", whiteSpace: "normal" }}
+          >
+            {description}
+          </span>
+        </Row>
+        <Row style={{ gap: 16 }}>
+          <span className={rowTitleTextCSS}>Fee per Call</span>
+          <span className={rowValueTextCSS}>
+            {formatTokenAmount(feePerCall)}
+          </span>
+        </Row>
+        <Row style={{ gap: 16 }}>
+          <span className={rowTitleTextCSS}>Accumulated Fee</span>
+          <span className={rowValueTextCSS}>{formatTokenAmount(accumFee)}</span>
+        </Row>
+        <Row style={{ gap: 16 }}>
+          <span className={rowTitleTextCSS}>Number of Runs</span>
+          <span className={rowValueTextCSS}>{numOfRuns}</span>
+        </Row>
+        <button
+          style={{
+            marginTop: 16,
+            fontSize: "14px",
+            lineHeight: "14px",
+            width: "fit-content",
+            color: "#D8405B",
+            borderBottom: "1px solid #D8405B",
+          }}
+        >
+          {status === "Active" ? "Inactivate Job" : "Activate Job"}
+        </button>
+        <img
+          src="/assets/images/jobDetailPageCharacter.svg"
+          alt=""
+          width={280}
+          className={css`
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            transform: translate(30%, 30%);
+          `}
+        />
+      </Column>
+    </Section>
   );
 }

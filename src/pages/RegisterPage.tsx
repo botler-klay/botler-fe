@@ -34,7 +34,6 @@ export function RegisterPage() {
             background: "#131313",
             padding: "120px 0 60px 0",
             width: "100%",
-            marginTop: 80,
             alignItems: "center",
           }}
         >
@@ -166,7 +165,7 @@ export function RegisterPage() {
             </Column>
             <Column style={{ gap: 8 }}>
               <span className={itemTitleTextCSS}>Description</span>
-              <input className={itemInputCSS} style={{ height: 36 }} />
+              <input className={itemInputCSS} style={{ height: 72 }} />
               <span className={itemDescriptionTextCSS}>
                 Deposit XXXX to yout job. Select an amount that will satisfy
                 multiple performances to start, then fund the Job directly once
