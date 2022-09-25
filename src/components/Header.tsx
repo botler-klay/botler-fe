@@ -1,5 +1,5 @@
 import { css } from "@emotion/css";
-import { useMemo, useState } from "react";
+import { ButtonHTMLAttributes, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BAOBAB_NETWORK_VERSION } from "../constants";
 import { useWallet } from "../hooks/useWallet";
@@ -7,6 +7,43 @@ import { routes } from "../routes";
 import { Row } from "./Layouts";
 import { Modal } from "./Modal";
 import { WalletModalContent } from "./ModalContents/WalletModalContent";
+
+function HeaderTabButton({
+  selected,
+  onClick,
+  children,
+  className,
+  style,
+}: { selected: boolean } & ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <div style={{ position: "relative" }}>
+      <button
+        style={{
+          color: selected ? "#1564ff" : "#a7a7a7",
+          ...style,
+        }}
+        onClick={onClick}
+        className={className}
+      >
+        {children}
+      </button>
+      {selected && (
+        <img
+          src="/assets/images/tabSelectedDot.svg"
+          alt=""
+          width="4px"
+          style={{
+            position: "absolute",
+            bottom: -4,
+            left: "50%",
+            transform: "translate(-50%, 0)",
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { wallet, disconnect } = useWallet();
@@ -40,29 +77,22 @@ export function Header() {
           style={{ width: 100, height: 20 }}
         />
         <Row style={{ gap: 36, width: "fit-content", fontSize: 14 }}>
-          <button
-            style={{
-              color: location.pathname.includes(routes.jobs)
-                ? "#1564ff"
-                : "#a7a7a7",
-            }}
+          <HeaderTabButton
+            selected={location.pathname.includes(routes.jobs)}
             onClick={() =>
               location.pathname !== routes.jobs && navigate(routes.jobs)
             }
           >
             Jobs
-          </button>
-          <button
-            style={{
-              color:
-                location.pathname === routes.rewards ? "#1564ff" : "#a7a7a7",
-            }}
+          </HeaderTabButton>
+          <HeaderTabButton
+            selected={location.pathname === routes.rewards}
             onClick={() =>
               location.pathname !== routes.rewards && navigate(routes.rewards)
             }
           >
             Rewards
-          </button>
+          </HeaderTabButton>
         </Row>
       </Row>
       <Row style={{ width: "fit-content", gap: 24, alignItems: "center" }}>
@@ -86,7 +116,7 @@ export function Header() {
         <button
           className={css`
             background: #282a34;
-            border-radius: 10px;
+            border-radius: 6px;
             color: #d8d8d8;
             padding: 8px 18px;
           `}

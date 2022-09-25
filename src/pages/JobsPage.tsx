@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { css } from "@emotion/css";
+import styled from "@emotion/styled";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PrimaryButton } from "../components/Button";
@@ -11,6 +12,19 @@ import { useJobs } from "../hooks/useJobs";
 import { useWallet } from "../hooks/useWallet";
 import { routes } from "../routes";
 import { compareBigNumber } from "../utils/bignumber";
+
+const JobsTabButton = styled.button<{ selected: boolean }>`
+  font-weight: ${({ selected }) => (selected ? "bold" : "normal")};
+  padding: 12px 32px;
+  border-bottom: ${({ selected }) =>
+    selected ? "2px solid #1564FF" : "unset"};
+  color: ${({ selected }) => (selected ? "#1564FF" : "#a7a7a7")};
+  z-index: 1;
+`;
+
+const JobsSortButton = styled.button<{ selected: boolean }>`
+  color: ${({ selected }) => (selected ? "white" : "#a7a7a7")};
+`;
 
 export function JobsPage() {
   const { data } = useJobs();
@@ -146,16 +160,30 @@ export function JobsPage() {
       </Section>
       <Section>
         <Column style={{ gap: 16 }}>
-          <input
-            className={css`
-              border: 1px solid #a7a7a7;
-              background-color: transparent;
-              padding: 8px 20px;
-              color: white;
-            `}
-            placeholder="Find a Job using job name or address"
-            onChange={(e) => setSearchStr(e.target.value)}
-          />
+          <div style={{ position: "relative" }}>
+            <input
+              className={css`
+                border: 1px solid #a7a7a7;
+                background-color: transparent;
+                padding: 8px 20px;
+                width: 100%;
+                color: white;
+              `}
+              placeholder="Find a Job using job name or address"
+              onChange={(e) => setSearchStr(e.target.value)}
+            />
+            <img
+              src="/assets/images/search.svg"
+              alt=""
+              width="14px"
+              style={{
+                position: "absolute",
+                right: 10,
+                top: "50%",
+                transform: "translate(0, -50%)",
+              }}
+            />
+          </div>
           <Column style={{ gap: 12 }}>
             <Row
               style={{
@@ -165,30 +193,18 @@ export function JobsPage() {
                 position: "relative",
               }}
             >
-              <button
+              <JobsTabButton
                 onClick={() => setShowMyJobOnly(false)}
-                style={{
-                  fontWeight: showMyJobOnly ? "normal" : "bold",
-                  padding: "12px 32px",
-                  borderBottom: showMyJobOnly ? "unset" : "2px solid #1564FF",
-                  color: showMyJobOnly ? "#a7a7a7" : "#1564FF",
-                  zIndex: 1,
-                }}
+                selected={!showMyJobOnly}
               >
                 All jobs
-              </button>
-              <button
+              </JobsTabButton>
+              <JobsTabButton
                 onClick={() => setShowMyJobOnly(true)}
-                style={{
-                  fontWeight: showMyJobOnly ? "bold" : "normal",
-                  padding: "12px 32px",
-                  color: showMyJobOnly ? "#1564FF" : "#a7a7a7",
-                  borderBottom: showMyJobOnly ? "2px solid #1564FF" : "unset",
-                  zIndex: 1,
-                }}
+                selected={showMyJobOnly}
               >
                 My Jobs
-              </button>
+              </JobsTabButton>
               <div
                 className={css`
                   position: absolute;
@@ -209,8 +225,8 @@ export function JobsPage() {
                   gap: 32px;
                 `}
               >
-                <button
-                  style={{ color: sortKey === "balance" ? "white" : "#a7a7a7" }}
+                <JobsSortButton
+                  selected={sortKey === "balance"}
                   onClick={() =>
                     setSortKey((prev) =>
                       prev === "balance" ? "default" : "balance"
@@ -218,11 +234,9 @@ export function JobsPage() {
                   }
                 >
                   Balance ∧
-                </button>
-                <button
-                  style={{
-                    color: sortKey === "feePerCall" ? "white" : "#a7a7a7",
-                  }}
+                </JobsSortButton>
+                <JobsSortButton
+                  selected={sortKey === "feePerCall"}
                   onClick={() =>
                     setSortKey((prev) =>
                       prev === "feePerCall" ? "default" : "feePerCall"
@@ -230,11 +244,9 @@ export function JobsPage() {
                   }
                 >
                   Fee/Call ∧
-                </button>
-                <button
-                  style={{
-                    color: sortKey === "accumFee" ? "white" : "#a7a7a7",
-                  }}
+                </JobsSortButton>
+                <JobsSortButton
+                  selected={sortKey === "accumFee"}
                   onClick={() =>
                     setSortKey((prev) =>
                       prev === "accumFee" ? "default" : "accumFee"
@@ -242,7 +254,7 @@ export function JobsPage() {
                   }
                 >
                   Accumulated Fee ∧
-                </button>
+                </JobsSortButton>
               </Row>
               <Row
                 className={css`

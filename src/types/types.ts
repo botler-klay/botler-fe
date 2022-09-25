@@ -14,6 +14,7 @@ export interface Wallet {
 
 export interface ComponentProps {
   style?: CSSProperties;
+  className?: string;
   children: ReactNode;
 }
 
