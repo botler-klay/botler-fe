@@ -92,14 +92,14 @@ export function RegisterPage() {
         >
           <div style={{ width: "100%", position: "relative", height: 210 }}>
             <img
-              src="/assets/images/registerCompletedDecoration.svg"
+              src="/assets/images/registerCompletedDecoration.png"
               alt=""
               width="100%"
               style={{ position: "absolute", zIndex: 0 }}
             />
             <Row style={{ justifyContent: "center" }}>
               <img
-                src="/assets/images/registerCompletedCharacter.svg"
+                src="/assets/images/registerCompletedCharacter.png"
                 alt=""
                 height="240px"
                 style={{
@@ -154,7 +154,7 @@ export function RegisterPage() {
             }}
           >
             <img
-              src="/assets/images/registerPageCharacter.svg"
+              src="/assets/images/registerPageCharacter.png"
               alt=""
               width="360px"
               style={{ transform: "translate(0, 50%)", zIndex: 0 }}

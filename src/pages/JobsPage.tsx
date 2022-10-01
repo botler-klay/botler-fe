@@ -149,7 +149,7 @@ export function JobsPage() {
             </Row>
           </Column>
           <img
-            src="/assets/images/jobsPageCharacter.svg"
+            src="/assets/images/jobsPageCharacter.png"
             alt=""
             className={css`
               width: 360px;

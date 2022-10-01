@@ -9,7 +9,7 @@ export function RewardsPage() {
       <Column style={{ padding: "0 64px", gap: 80 }}>
         <Row style={{ justifyContent: "center" }}>
           <img
-            src="/assets/images/rewardsPageCharacter.svg"
+            src="/assets/images/rewardsPageCharacter.png"
             alt=""
             width="240px"
           />

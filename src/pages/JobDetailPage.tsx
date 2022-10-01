@@ -186,7 +186,7 @@ export function JobDetailPage() {
           {active ? "Inactivate Job" : "Activate Job"}
         </button>
         <img
-          src="/assets/images/jobDetailPageCharacter.svg"
+          src="/assets/images/jobDetailPageCharacter.png"
           alt=""
           width={280}
           className={css`
