@@ -36,7 +36,7 @@ export function JobsPage() {
   const [showMyJobOnly, setShowMyJobOnly] = useState(false);
 
   const [sortKey, setSortKey] = useState<
-    "balance" | "feePerCall" | "accumFee" | "default"
+    "balance" | "botlerFee" | "accumulatedFee" | "default"
   >("default");
 
   const sortedData = useMemo(() => {
@@ -62,14 +62,14 @@ export function JobsPage() {
     }
 
     if (showActiveOnly) {
-      result = result.filter((job) => job.status === "Active");
+      result = result.filter((job) => job.active);
     }
 
     if (showMyJobOnly) {
       if (!wallet) return [];
 
       result = result.filter(
-        (job) => job.owner.toLowerCase() === wallet.address.toLowerCase()
+        (job) => job.jobOwner.toLowerCase() === wallet.address.toLowerCase()
       );
     }
 
@@ -236,20 +236,20 @@ export function JobsPage() {
                   Balance ∧
                 </JobsSortButton>
                 <JobsSortButton
-                  selected={sortKey === "feePerCall"}
+                  selected={sortKey === "botlerFee"}
                   onClick={() =>
                     setSortKey((prev) =>
-                      prev === "feePerCall" ? "default" : "feePerCall"
+                      prev === "botlerFee" ? "default" : "botlerFee"
                     )
                   }
                 >
                   Fee/Call ∧
                 </JobsSortButton>
                 <JobsSortButton
-                  selected={sortKey === "accumFee"}
+                  selected={sortKey === "accumulatedFee"}
                   onClick={() =>
                     setSortKey((prev) =>
-                      prev === "accumFee" ? "default" : "accumFee"
+                      prev === "accumulatedFee" ? "default" : "accumulatedFee"
                     )
                   }
                 >

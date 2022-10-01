@@ -1,8 +1,11 @@
 import { css } from "@emotion/css";
-import { useState } from "react";
+import BigNumber from "bignumber.js";
+import { ChangeEvent, useState } from "react";
 import { PrimaryButton } from "../components/Button";
 import { Column, Row } from "../components/Layouts";
 import { Section } from "../components/Section";
+import { registryContract } from "../contracts/contracts";
+import { useWallet } from "../hooks/useWallet";
 
 const itemTitleTextCSS = css`
   font-size: 14px;
@@ -24,7 +27,57 @@ const itemDescriptionTextCSS = css`
 `;
 
 export function RegisterPage() {
+  const { wallet } = useWallet();
+
   const [jobRegistered, setJobRegistered] = useState(false);
+  const [txHash, setTxHash] = useState("");
+
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [botlerFeeStr, setBotlerFeeStr] = useState("");
+  const [description, setDescription] = useState("");
+  const [valueStr, setValueStr] = useState("");
+
+  const botlerFee = new BigNumber(botlerFeeStr).times(
+    new BigNumber(10).pow(18)
+  );
+  const value = new BigNumber(valueStr).times(new BigNumber(10).pow(18));
+
+  const handleChangeInput = (
+    e: ChangeEvent<HTMLInputElement>,
+    setState: (n: string) => void
+  ) => {
+    const strVal = e.target.value;
+
+    if (!strVal) {
+      setState("");
+
+      return;
+    }
+
+    const bigNumVal = new BigNumber(strVal).times(new BigNumber(10).pow(18));
+
+    if (!bigNumVal.isNaN()) {
+      setState(strVal);
+    }
+  };
+
+  const handleRegister = async () => {
+    if (!wallet) return;
+
+    await registryContract.methods
+      .registerJob(address, name, description, botlerFee?.toString() || "0")
+      .send({ from: wallet.address, value: value?.toString() || "0" })
+      .on("transactionHash", (hash: string) => {
+        setTxHash(hash);
+      })
+      .on("receipt", (receipt: any) => {
+        console.log(receipt);
+      })
+      .on("error", console.error);
+
+    setJobRegistered(true);
+  };
 
   return (
     <Section>
@@ -85,7 +138,7 @@ export function RegisterPage() {
                 color: #1564ef;
               `}
             >
-              0xashfjksdnjgkwufoisjdngfdogfvdoajdnfbfjsdiaeokdjnfbvjfdkseaiosf{" "}
+              {txHash}{" "}
             </span>
             <img src="/assets/images/copy.svg" alt="copy" width={10} />
           </Row>
@@ -136,14 +189,22 @@ export function RegisterPage() {
           >
             <Column style={{ gap: 8 }}>
               <span className={itemTitleTextCSS}>Job Name</span>
-              <input className={itemInputCSS} />
+              <input
+                className={itemInputCSS}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
               <span className={itemDescriptionTextCSS}>
                 Select a unique name for your Job.
               </span>
             </Column>
             <Column style={{ gap: 8 }}>
               <span className={itemTitleTextCSS}>Job Address</span>
-              <input className={itemInputCSS} />
+              <input
+                className={itemInputCSS}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
               <span className={itemDescriptionTextCSS}>
                 Address of your Job-compatible contract to perform Job on.{" "}
               </span>
@@ -157,7 +218,11 @@ export function RegisterPage() {
             </Column>
             <Column style={{ gap: 8 }}>
               <span className={itemTitleTextCSS}>Botler Fee</span>
-              <input className={itemInputCSS} />
+              <input
+                className={itemInputCSS}
+                value={botlerFeeStr}
+                onChange={(e) => handleChangeInput(e, setBotlerFeeStr)}
+              />
               <span className={itemDescriptionTextCSS}>
                 Botler fee setting is optional, but at least the minimum amount
                 must be set.
@@ -165,7 +230,12 @@ export function RegisterPage() {
             </Column>
             <Column style={{ gap: 8 }}>
               <span className={itemTitleTextCSS}>Description</span>
-              <input className={itemInputCSS} style={{ height: 72 }} />
+              <input
+                className={itemInputCSS}
+                style={{ height: 72 }}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
               <span className={itemDescriptionTextCSS}>
                 Deposit XXXX to yout job. Select an amount that will satisfy
                 multiple performances to start, then fund the Job directly once
@@ -174,7 +244,11 @@ export function RegisterPage() {
             </Column>
             <Column style={{ gap: 8 }}>
               <span className={itemTitleTextCSS}>Initial deposit</span>
-              <input className={itemInputCSS} />
+              <input
+                className={itemInputCSS}
+                value={valueStr}
+                onChange={(e) => handleChangeInput(e, setValueStr)}
+              />
               <span className={itemDescriptionTextCSS}>
                 Botler fee setting is optional, but at least the minimum amount
                 must be set.
@@ -198,7 +272,7 @@ export function RegisterPage() {
               >
                 <Row style={{ justifyContent: "space-between" }}>
                   <span>Initial deposit</span>
-                  <span>XXXXX KLAY</span>
+                  <span>{valueStr || "0"} KLAY</span>
                 </Row>
                 <Row style={{ justifyContent: "space-between" }}>
                   <span>Registration Fee</span>
@@ -239,7 +313,7 @@ export function RegisterPage() {
                 >
                   Cancel
                 </button>
-                <PrimaryButton onClick={() => setJobRegistered(true)}>
+                <PrimaryButton onClick={handleRegister}>
                   Register Job
                 </PrimaryButton>
               </Row>

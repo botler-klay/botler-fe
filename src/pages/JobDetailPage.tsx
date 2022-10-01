@@ -5,6 +5,7 @@ import { Column, Row } from "../components/Layouts";
 import { Modal } from "../components/Modal";
 import { BalanceModalContent } from "../components/ModalContents/BalanceModalContent";
 import { Section } from "../components/Section";
+import { registryContract } from "../contracts/contracts";
 import { useJobs } from "../hooks/useJobs";
 import { useWallet } from "../hooks/useWallet";
 import { routes } from "../routes";
@@ -50,13 +51,37 @@ export function JobDetailPage() {
   const {
     name,
     address,
-    feePerCall,
-    accumFee,
+    botlerFee,
+    accumulatedFee,
     balance,
-    status,
+    active,
     description,
-    numOfRuns,
+    callCount,
   } = jobDetail;
+
+  const handleActivateJob = async () => {
+    if (!wallet) return;
+
+    await registryContract.methods
+      .activateJob(address)
+      .send({ from: wallet.address })
+      .on("receipt", (receipt: any) => {
+        console.log(receipt);
+      })
+      .on("error", console.error);
+  };
+
+  const handleDeactivateJob = async () => {
+    if (!wallet) return;
+
+    await registryContract.methods
+      .deactivateJob(address)
+      .send({ from: wallet.address })
+      .on("receipt", (receipt: any) => {
+        console.log(receipt);
+      })
+      .on("error", console.error);
+  };
 
   return (
     <Section style={{ marginTop: 32 }}>
@@ -77,7 +102,7 @@ export function JobDetailPage() {
         </Row>
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Status</span>
-          <span className={rowValueTextCSS}>{status}</span>
+          <span className={rowValueTextCSS}>{active}</span>
         </Row>
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Job Address</span>
@@ -115,6 +140,7 @@ export function JobDetailPage() {
             <BalanceModalContent
               close={() => setIsOpen(false)}
               balance={jobDetail.balance}
+              jobAddress={address}
             />
           </Modal>
         </Row>
@@ -133,16 +159,18 @@ export function JobDetailPage() {
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Fee per Call</span>
           <span className={rowValueTextCSS}>
-            {formatTokenAmount(feePerCall)}
+            {formatTokenAmount(botlerFee)}
           </span>
         </Row>
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Accumulated Fee</span>
-          <span className={rowValueTextCSS}>{formatTokenAmount(accumFee)}</span>
+          <span className={rowValueTextCSS}>
+            {formatTokenAmount(accumulatedFee)}
+          </span>
         </Row>
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Number of Runs</span>
-          <span className={rowValueTextCSS}>{numOfRuns}</span>
+          <span className={rowValueTextCSS}>{callCount}</span>
         </Row>
         <button
           style={{
@@ -153,8 +181,9 @@ export function JobDetailPage() {
             color: "#D8405B",
             borderBottom: "1px solid #D8405B",
           }}
+          onClick={active ? handleDeactivateJob : handleActivateJob}
         >
-          {status === "Active" ? "Inactivate Job" : "Activate Job"}
+          {active ? "Inactivate Job" : "Activate Job"}
         </button>
         <img
           src="/assets/images/jobDetailPageCharacter.svg"

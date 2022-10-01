@@ -1,7 +1,9 @@
 import { css } from "@emotion/css";
 import BigNumber from "bignumber.js";
 import { ChangeEvent, useState } from "react";
+import { registryContract } from "../../contracts/contracts";
 import { useBalance } from "../../hooks/useBalance";
+import { useWallet } from "../../hooks/useWallet";
 import { formatTokenAmount } from "../../utils/bignumber";
 import { PrimaryButton } from "../Button";
 import { Column, Row } from "../Layouts";
@@ -16,21 +18,23 @@ const boxCSS = css`
 export function BalanceModalContent({
   close,
   balance,
+  jobAddress,
 }: {
   close: () => void;
   balance: BigNumber;
+  jobAddress: string;
 }) {
+  const { wallet } = useWallet();
   const walletBalance = useBalance();
   const [isAdd, setIsAdd] = useState(true);
-  const [amountStr, setAmountStr] = useState<string | undefined>(undefined);
-  const [amount, setAmount] = useState<BigNumber | undefined>(undefined);
+  const [amountStr, setAmountStr] = useState("");
+  const amount = new BigNumber(amountStr || 0).times(new BigNumber(10).pow(18));
 
   const handleChangeAmount = (e: ChangeEvent<HTMLInputElement>) => {
     const strVal = e.target.value;
 
     if (!strVal) {
-      setAmountStr(undefined);
-      setAmount(undefined);
+      setAmountStr("");
 
       return;
     }
@@ -40,7 +44,6 @@ export function BalanceModalContent({
     if (!bigNumVal.isNaN()) {
       if (!isAdd) {
         if (bigNumVal.gt(balance)) {
-          setAmount(balance);
           setAmountStr(formatTokenAmount(balance));
 
           return;
@@ -48,25 +51,49 @@ export function BalanceModalContent({
       }
 
       if (bigNumVal.gt(walletBalance)) {
-        setAmount(walletBalance);
         setAmountStr(formatTokenAmount(walletBalance));
 
         return;
       }
 
       if (bigNumVal.lte(0)) {
-        setAmount(new BigNumber(0));
         setAmountStr("0");
 
         return;
       }
 
-      setAmount(bigNumVal);
       setAmountStr(strVal);
     }
   };
 
-  const onConfirm = () => {};
+  const onConfirm = async () => {
+    if (!wallet) {
+      close();
+      return;
+    }
+
+    if (isAdd) {
+      await registryContract.methods
+        .deposit(jobAddress)
+        .send({ from: wallet.address, value: amount.toString() })
+        .on("receipt", (receipt: any) => {
+          console.log(receipt);
+        })
+        .on("error", console.error);
+
+      close();
+      return;
+    }
+
+    await registryContract.methods
+      .withdraw(jobAddress, amount.toString())
+      .send({ from: wallet.address })
+      .on("receipt", (receipt: any) => {
+        console.log(receipt);
+      })
+      .on("error", console.error);
+    close();
+  };
 
   const resultBalance = balance.plus(amount ? amount.times(isAdd ? 1 : -1) : 0);
 

@@ -22,11 +22,11 @@ export interface Job {
   jid: string;
   name: string;
   address: string;
-  feePerCall: BigNumber;
-  accumFee: BigNumber;
+  botlerFee: BigNumber;
+  accumulatedFee: BigNumber;
   balance: BigNumber;
-  status: string;
-  owner: string;
+  active: boolean;
+  jobOwner: string;
   description: string;
-  numOfRuns: number;
+  callCount: number;
 }

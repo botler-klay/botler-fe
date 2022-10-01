@@ -20,11 +20,11 @@ export function JobCard({ job }: { job: Job }) {
         font-size: 12px;
         justify-content: space-between;
         text-align: start;
-        border-top: 4px solid ${job.status === "Active" ? "#1564FF" : "#A7A7A7"};
+        border-top: 4px solid ${job.active ? "#1564FF" : "#A7A7A7"};
 
         &:hover {
           border-top: unset;
-          background: ${job.status === "Active"
+          background: ${job.active
             ? "linear-gradient(233.32deg, #1564FF -27.79%, #0B0B0B 87.01%)"
             : "linear-gradient(233.7deg, #A7A7A7 5.84%, #0B0B0B 88.94%)"};
         }
@@ -49,11 +49,11 @@ export function JobCard({ job }: { job: Job }) {
         </Row>
         <Row style={{ justifyContent: "space-between" }}>
           <span>Fee / Call</span>
-          <span>{formatTokenAmount(job.feePerCall)}</span>
+          <span>{formatTokenAmount(job.botlerFee)}</span>
         </Row>
         <Row style={{ justifyContent: "space-between" }}>
           <span>Accumulated Fee</span>
-          <span>{formatTokenAmount(job.accumFee)}</span>
+          <span>{formatTokenAmount(job.accumulatedFee)}</span>
         </Row>
       </Column>
     </Column>

@@ -14,10 +14,12 @@ export function Modal({ style, isOpen, children }: ReactModal.Props) {
           border: "unset",
           borderRadius: "0",
           padding: "40px",
+          zIndex: 1000,
           ...style?.content,
         },
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.75)",
+          zIndex: 999,
           ...style?.overlay,
         },
       }}

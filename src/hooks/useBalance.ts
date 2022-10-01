@@ -1,14 +1,10 @@
 import BigNumber from "bignumber.js";
-import Caver from "caver-js";
 import useSWR from "swr";
+import { caver } from "../contracts/contracts";
 import { useWallet } from "./useWallet";
-
-const caver = new Caver(window.klaytn);
 
 async function fetchBalance(account: string) {
   const balance = await caver.klay.getBalance(account);
-
-  console.log(caver, account, balance);
 
   return balance;
 }
