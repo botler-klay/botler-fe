@@ -67,7 +67,7 @@ export function BalanceModalContent({
   };
 
   const onConfirm = async () => {
-    if (!wallet) {
+    if (!wallet || !wallet.isValid) {
       close();
       return;
     }

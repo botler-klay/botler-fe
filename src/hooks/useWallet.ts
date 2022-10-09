@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { BAOBAB_NETWORK_VERSION } from "../constants";
 import { walletAtom } from "../recoil/atoms";
 import { getKaikasProvider } from "../utils/kaikas";
 
@@ -17,6 +18,7 @@ export function useWallet() {
       setWallet({
         address: accounts[0],
         networkVersion: provider.networkVersion,
+        isValid: provider.networkVersion === BAOBAB_NETWORK_VERSION,
       });
 
       return true;
@@ -42,7 +44,7 @@ export function useWalletEvent() {
   const [wallet, setWallet] = useRecoilState(walletAtom);
 
   useEffect(() => {
-    if (!wallet) return;
+    if (!wallet || !wallet.isValid) return;
 
     const provider = getKaikasProvider();
 
@@ -56,4 +58,17 @@ export function useWalletEvent() {
       setWallet((prev) => prev && { ...prev, networkVersion });
     });
   }, [setWallet, wallet]);
+
+  useEffect(() => {
+    if (!wallet || !wallet.isValid) return;
+
+    setWallet(
+      (prev) =>
+        prev && {
+          ...prev,
+          isValid: wallet.networkVersion === BAOBAB_NETWORK_VERSION,
+        }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallet?.networkVersion]);
 }

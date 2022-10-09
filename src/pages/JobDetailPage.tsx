@@ -60,7 +60,7 @@ export function JobDetailPage() {
   } = jobDetail;
 
   const handleActivateJob = async () => {
-    if (!wallet) return;
+    if (!wallet || !wallet.isValid) return;
 
     await registryContract.methods
       .activateJob(address)
@@ -72,7 +72,7 @@ export function JobDetailPage() {
   };
 
   const handleDeactivateJob = async () => {
-    if (!wallet) return;
+    if (!wallet || !wallet.isValid) return;
 
     await registryContract.methods
       .deactivateJob(address)
@@ -102,7 +102,9 @@ export function JobDetailPage() {
         </Row>
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Status</span>
-          <span className={rowValueTextCSS}>{active}</span>
+          <span className={rowValueTextCSS}>
+            {active ? "Active" : "Inactive"}
+          </span>
         </Row>
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Job Address</span>

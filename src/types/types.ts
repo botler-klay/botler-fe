@@ -10,6 +10,7 @@ declare global {
 export interface Wallet {
   address: string;
   networkVersion: number;
+  isValid: boolean;
 }
 
 export interface ComponentProps {

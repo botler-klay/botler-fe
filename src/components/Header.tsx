@@ -1,7 +1,6 @@
 import { css } from "@emotion/css";
 import { ButtonHTMLAttributes, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BAOBAB_NETWORK_VERSION } from "../constants";
 import { useWallet } from "../hooks/useWallet";
 import { routes } from "../routes";
 import { Row } from "./Layouts";
@@ -55,7 +54,7 @@ export function Header() {
       return "Connect Wallet";
     }
 
-    if (wallet.networkVersion !== BAOBAB_NETWORK_VERSION) {
+    if (!wallet.isValid) {
       return "Invalid Network";
     }
 

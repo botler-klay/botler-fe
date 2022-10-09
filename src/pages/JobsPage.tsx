@@ -66,7 +66,7 @@ export function JobsPage() {
     }
 
     if (showMyJobOnly) {
-      if (!wallet) return [];
+      if (!wallet || !wallet.isValid) return [];
 
       result = result.filter(
         (job) => job.jobOwner.toLowerCase() === wallet.address.toLowerCase()

@@ -66,7 +66,7 @@ export function RegisterPage() {
   };
 
   const handleRegister = async () => {
-    if (!wallet) return;
+    if (!wallet || !wallet.isValid) return;
 
     try {
       await registryContract.methods
