@@ -80,8 +80,7 @@ export function RewardsPage() {
               color: #a7a7a7;
             `}
           >
-            It is possible to receive botler tokens accumulated after the
-            scheduled TGE in January 2023.
+            It is possible to receive botler tokens accumulated after the TGE.
           </Row>
         </Column>
       </Column>

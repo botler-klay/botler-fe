@@ -71,11 +71,17 @@ export function Header() {
       }}
     >
       <Row style={{ gap: 40, width: "fit-content", alignItems: "center" }}>
-        <img
-          src="/assets/images/logo.svg"
-          alt="Botler"
-          style={{ width: 100, height: 20 }}
-        />
+        <button
+          onClick={() =>
+            location.pathname !== routes.jobs && navigate(routes.jobs)
+          }
+        >
+          <img
+            src="/assets/images/logo.svg"
+            alt="Botler"
+            style={{ width: 100, height: 20 }}
+          />
+        </button>
         <Row style={{ gap: 36, width: "fit-content", fontSize: 14 }}>
           <HeaderTabButton
             selected={location.pathname.includes(routes.jobs)}

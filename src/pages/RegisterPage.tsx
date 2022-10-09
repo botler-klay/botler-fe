@@ -1,11 +1,13 @@
 import { css } from "@emotion/css";
 import BigNumber from "bignumber.js";
 import { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { PrimaryButton } from "../components/Button";
 import { Column, Row } from "../components/Layouts";
 import { Section } from "../components/Section";
 import { registryContract } from "../contracts/contracts";
 import { useWallet } from "../hooks/useWallet";
+import { routes } from "../routes";
 
 const itemTitleTextCSS = css`
   font-size: 14px;
@@ -28,6 +30,7 @@ const itemDescriptionTextCSS = css`
 
 export function RegisterPage() {
   const { wallet } = useWallet();
+  const navigate = useNavigate();
 
   const [jobRegistered, setJobRegistered] = useState(false);
   const [txHash, setTxHash] = useState("");
@@ -65,16 +68,18 @@ export function RegisterPage() {
   const handleRegister = async () => {
     if (!wallet) return;
 
-    await registryContract.methods
-      .registerJob(address, name, description, botlerFee?.toString() || "0")
-      .send({ from: wallet.address, value: value?.toString() || "0" })
-      .on("transactionHash", (hash: string) => {
-        setTxHash(hash);
-      })
-      .on("receipt", (receipt: any) => {
-        console.log(receipt);
-      })
-      .on("error", console.error);
+    try {
+      await registryContract.methods
+        .registerJob(address, name, description, botlerFee?.toString() || "0")
+        .send({ from: wallet.address, value: value?.toString() || "0" })
+        .on("transactionHash", (hash: string) => {
+          setTxHash(hash);
+        })
+        .on("receipt", (receipt: any) => {
+          console.log(receipt);
+        })
+        .on("error", console.error);
+    } catch {}
 
     setJobRegistered(true);
   };
@@ -85,7 +90,7 @@ export function RegisterPage() {
         <Column
           style={{
             background: "#131313",
-            padding: "120px 0 60px 0",
+            padding: "120px 0 24px 0",
             width: "100%",
             alignItems: "center",
           }}
@@ -130,7 +135,11 @@ export function RegisterPage() {
           >
             View your transaction here:
           </span>
-          <Row as="button" style={{ justifyContent: "center", gap: 4 }}>
+          <Row
+            as="button"
+            style={{ justifyContent: "center", gap: 4 }}
+            onClick={() => navigator.clipboard.writeText(txHash)}
+          >
             <span
               className={css`
                 font-size: 14px;
@@ -142,6 +151,19 @@ export function RegisterPage() {
             </span>
             <img src="/assets/images/copy.svg" alt="copy" width={10} />
           </Row>
+          <button
+            className={css`
+              font-size: 12px;
+              line-height: 12px;
+              color: gray;
+              margin-top: 28px;
+              padding: 8px 16px;
+              border: 1px solid gray;
+            `}
+            onClick={() => navigate(routes.jobs)}
+          >
+            Return to Jobs
+          </button>
         </Column>
       ) : (
         <Column style={{ gap: 32 }}>
@@ -178,9 +200,8 @@ export function RegisterPage() {
                   width: 480px;
                 `}
               >
-                Give some short description about the service. Give some short
-                description about the service. Depending on the length of the
-                sentence, the size of this block can be adjusted
+                Delegate a job to Botler. <br />
+                Botlers are more interested in jobs with higer botler fee.
               </span>
             </Column>
           </Row>
@@ -210,13 +231,6 @@ export function RegisterPage() {
               </span>
             </Column>
             <Column style={{ gap: 8 }}>
-              <span className={itemTitleTextCSS}>Fee per Call</span>
-              <input className={itemInputCSS} />
-              <span className={itemDescriptionTextCSS}>
-                Please write down how much fee will be charged per call.
-              </span>
-            </Column>
-            <Column style={{ gap: 8 }}>
               <span className={itemTitleTextCSS}>Botler Fee</span>
               <input
                 className={itemInputCSS}
@@ -236,11 +250,6 @@ export function RegisterPage() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
-              <span className={itemDescriptionTextCSS}>
-                Deposit XXXX to yout job. Select an amount that will satisfy
-                multiple performances to start, then fund the Job directly once
-                its operational.
-              </span>
             </Column>
             <Column style={{ gap: 8 }}>
               <span className={itemTitleTextCSS}>Initial deposit</span>
@@ -250,75 +259,76 @@ export function RegisterPage() {
                 onChange={(e) => handleChangeInput(e, setValueStr)}
               />
               <span className={itemDescriptionTextCSS}>
-                Botler fee setting is optional, but at least the minimum amount
-                must be set.
+                Deposit KLAY to yout job. Select an amount that will satisfy
+                multiple performances to start, then fund the Job directly once
+                its operational.
               </span>
             </Column>
-          </Column>
-          <Row style={{ justifyContent: "flex-end", padding: "32px 0" }}>
-            <Column
-              style={{
-                width: "fit-content",
-                minWidth: 240,
-                fontSize: 14,
-                lineHeight: "14px",
-              }}
-            >
+            <Row style={{ justifyContent: "flex-end", padding: "36px 0 0 0" }}>
               <Column
                 style={{
-                  color: "#a7a7a7",
-                  gap: 8,
+                  width: "fit-content",
+                  minWidth: 240,
+                  fontSize: 14,
+                  lineHeight: "14px",
                 }}
               >
-                <Row style={{ justifyContent: "space-between" }}>
-                  <span>Initial deposit</span>
-                  <span>{valueStr || "0"} KLAY</span>
-                </Row>
-                <Row style={{ justifyContent: "space-between" }}>
-                  <span>Registration Fee</span>
-                  <span>XXX KLAY</span>
-                </Row>
-              </Column>
-              <Column>
-                <Row
+                <Column
                   style={{
-                    margin: "16px 0",
-                    height: 1,
-                    backgroundColor: "white",
+                    color: "#a7a7a7",
+                    gap: 8,
                   }}
-                />
+                >
+                  <Row style={{ justifyContent: "space-between" }}>
+                    <span>Initial deposit</span>
+                    <span>{valueStr || "0"} KLAY</span>
+                  </Row>
+                  <Row style={{ justifyContent: "space-between" }}>
+                    <span>Registration Fee</span>
+                    <span>XXX KLAY</span>
+                  </Row>
+                </Column>
+                <Column>
+                  <Row
+                    style={{
+                      margin: "16px 0",
+                      height: 1,
+                      backgroundColor: "white",
+                    }}
+                  />
+                  <Row
+                    style={{
+                      justifyContent: "flex-end",
+                      color: "white",
+                      fontWeight: 700,
+                    }}
+                  >
+                    XXXXX KLAY
+                  </Row>
+                </Column>
                 <Row
                   style={{
                     justifyContent: "flex-end",
-                    color: "white",
-                    fontWeight: 700,
+                    gap: 8,
+                    padding: "32px 0 0 0",
                   }}
                 >
-                  XXXXX KLAY
+                  <button
+                    className={css`
+                      padding: 12px 20px;
+                      border: 1px solid #a7a7a7;
+                      color: white;
+                    `}
+                  >
+                    Cancel
+                  </button>
+                  <PrimaryButton onClick={handleRegister}>
+                    Register Job
+                  </PrimaryButton>
                 </Row>
               </Column>
-              <Row
-                style={{
-                  justifyContent: "flex-end",
-                  gap: 8,
-                  padding: "32px 0",
-                }}
-              >
-                <button
-                  className={css`
-                    padding: 12px 20px;
-                    border: 1px solid #a7a7a7;
-                    color: white;
-                  `}
-                >
-                  Cancel
-                </button>
-                <PrimaryButton onClick={handleRegister}>
-                  Register Job
-                </PrimaryButton>
-              </Row>
-            </Column>
-          </Row>
+            </Row>
+          </Column>
         </Column>
       )}
     </Section>

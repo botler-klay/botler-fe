@@ -106,13 +106,13 @@ export function JobsPage() {
                 margin-bottom: 24px;
               `}
             >
-              Short{" "}
+              Automation{" "}
               <span
                 className={css`
                   color: #1564ff;
                 `}
               >
-                Description
+                for Klaytn Smart Contracts
               </span>
             </h1>
             <span
@@ -124,12 +124,9 @@ export function JobsPage() {
                 margin-bottom: 48px;
               `}
             >
-              Give some short description about the service. Give some short
-              description about the service. Depending on the length of the
-              sentence, the size of this block can be adjusted Give some short
-              description about the service. Give some short description about
-              the service. Depending on the length of the sentence, the size of
-              this block can be adjusted
+              Automate your smart contract with Botler. <br />
+              Botlers gonna take care of all your jobs. <br />
+              Be Lazy! Just Delegate!
             </span>
             <Row>
               <PrimaryButton onClick={() => navigate(routes.register)}>
@@ -143,6 +140,9 @@ export function JobsPage() {
                   font-size: 14px;
                   line-height: 14px;
                 `}
+                onClick={() =>
+                  window.open("https://botler-klaytn.gitbook.io/botler-klay/")
+                }
               >
                 Go to Docs
               </button>

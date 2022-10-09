@@ -4,7 +4,10 @@ import useSWR from "swr";
 import { Job } from "../types/types";
 
 async function fetchJobs(): Promise<Job[]> {
-  // const jobInfo = await registryContract.call("jobInfo");
+  // const jobList: string[] = await registryContract.call("jobList");
+  // const jobInfo: {[key: string]: Omit<Job, "address">} = await registryContract.call("jobInfo");
+
+  // return jobList.map((address: string) => ({address, ...jobInfo[address]}));
 
   return [
     {

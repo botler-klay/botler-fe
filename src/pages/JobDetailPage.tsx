@@ -157,7 +157,7 @@ export function JobDetailPage() {
           </span>
         </Row>
         <Row style={{ gap: 16 }}>
-          <span className={rowTitleTextCSS}>Fee per Call</span>
+          <span className={rowTitleTextCSS}>Botler Fee</span>
           <span className={rowValueTextCSS}>
             {formatTokenAmount(botlerFee)}
           </span>
