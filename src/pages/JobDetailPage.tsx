@@ -5,6 +5,7 @@ import { Column, Row } from "../components/Layouts";
 import { Modal } from "../components/Modal";
 import { BalanceModalContent } from "../components/ModalContents/BalanceModalContent";
 import { Section } from "../components/Section";
+import { GAS_LIMIT } from "../constants";
 import { registryContract } from "../contracts/contracts";
 import { useJobs } from "../hooks/useJobs";
 import { useWallet } from "../hooks/useWallet";
@@ -35,7 +36,7 @@ const rowValueTextCSS = css`
 export function JobDetailPage() {
   const navigate = useNavigate();
   const { jid } = useParams();
-  const { getJobDetail } = useJobs();
+  const { getJobDetail, mutate } = useJobs();
   const { wallet } = useWallet();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -64,9 +65,11 @@ export function JobDetailPage() {
 
     await registryContract.methods
       .activateJob(address)
-      .send({ from: wallet.address })
+      .send({ from: wallet.address, gas: GAS_LIMIT.default })
       .on("receipt", (receipt: any) => {
         console.log(receipt);
+        setIsOpen(false);
+        mutate();
       })
       .on("error", console.error);
   };
@@ -76,9 +79,11 @@ export function JobDetailPage() {
 
     await registryContract.methods
       .deactivateJob(address)
-      .send({ from: wallet.address })
+      .send({ from: wallet.address, gas: GAS_LIMIT.default })
       .on("receipt", (receipt: any) => {
         console.log(receipt);
+        setIsOpen(false);
+        mutate();
       })
       .on("error", console.error);
   };

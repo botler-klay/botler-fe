@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../routes";
 import { Job } from "../types/types";
 import { formatTokenAmount } from "../utils/bignumber";
+import { truncateAddress } from "../utils/common";
 import { Column, Row } from "./Layouts";
 
 export function JobCard({ job }: { job: Job }) {
@@ -40,7 +41,7 @@ export function JobCard({ job }: { job: Job }) {
         >
           {job.name}
         </h2>
-        <span>{job.address}</span>
+        <span>{truncateAddress(job.address)}</span>
       </Column>
       <Column style={{ gap: 4 }}>
         <Row style={{ justifyContent: "space-between" }}>

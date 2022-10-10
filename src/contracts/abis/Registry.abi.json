@@ -57,11 +57,23 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "job",
         "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "depositer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
       }
     ],
-    "name": "JobBalanceDeposit",
+    "name": "JobBalanceDeposited",
     "type": "event"
   },
   {
@@ -70,11 +82,36 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "job",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
       }
     ],
-    "name": "JobBalanceWithdraw",
+    "name": "JobBalanceWithdrawn",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "job",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fee",
+        "type": "uint256"
+      }
+    ],
+    "name": "JobBotlerFeeChanged",
     "type": "event"
   },
   {
@@ -88,6 +125,69 @@
       }
     ],
     "name": "JobDeactivated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "job",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "desc",
+        "type": "string"
+      }
+    ],
+    "name": "JobDescChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "job",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "JobNameChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "job",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      }
+    ],
+    "name": "JobOwnerChanged",
     "type": "event"
   },
   {
@@ -129,6 +229,49 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minimumBotlerFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "registrationFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "executionFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "adminFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "rewardContract",
+        "type": "address"
+      }
+    ],
+    "name": "RegistrySettingChanged",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -145,7 +288,28 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "jobExist",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -184,7 +348,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "deposit",
+        "name": "balance",
         "type": "uint256"
       },
       {
@@ -199,7 +363,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -218,7 +383,8 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -231,7 +397,57 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "registryStatus",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "minimumBotlerFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "registrationFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "executionFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "adminFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "accumulatedAdminFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "jobListLength",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "rewardContract",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -270,7 +486,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_address",
+        "name": "_job",
         "type": "address"
       },
       {
@@ -292,13 +508,14 @@
     "name": "registerJob",
     "outputs": [],
     "stateMutability": "payable",
-    "type": "function"
+    "type": "function",
+    "payable": true
   },
   {
     "inputs": [
       {
         "internalType": "address",
-        "name": "_address",
+        "name": "_job",
         "type": "address"
       }
     ],
@@ -311,11 +528,83 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_address",
+        "name": "_job",
         "type": "address"
       }
     ],
     "name": "deactivateJob",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_job",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      }
+    ],
+    "name": "changeJobName",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_job",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_desc",
+        "type": "string"
+      }
+    ],
+    "name": "changeJobDesc",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_job",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_fee",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeJobBotlerFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_job",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "changeJobOwner",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -362,8 +651,9 @@
         "type": "bool"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -386,10 +676,11 @@
         "type": "address"
       }
     ],
-    "name": "depositFee",
+    "name": "deposit",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "stateMutability": "payable",
+    "type": "function",
+    "payable": true
   },
   {
     "inputs": [
@@ -412,6 +703,44 @@
   {
     "inputs": [],
     "name": "withdrawAdminFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_minimumBotlerFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_registrationFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_executionFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_adminFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_rewardContract",
+        "type": "address"
+      }
+    ],
+    "name": "changeRegistrySetting",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

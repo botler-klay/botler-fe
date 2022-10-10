@@ -42,11 +42,12 @@ export function JobsPage() {
   const sortedData = useMemo(() => {
     if (sortKey === "default" || !data) return data;
 
-    return [...data].sort((a, b) => compareBigNumber(a[sortKey], b[sortKey]));
+    return [...data]
+      .sort((a, b) => compareBigNumber(a[sortKey], b[sortKey]))
+      .reverse();
   }, [JSON.stringify(data), sortKey]);
 
   const filteredData = useMemo(() => {
-    console.log("filter");
     if (!sortedData) return [];
 
     let result = [...sortedData];

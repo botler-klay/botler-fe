@@ -31,3 +31,14 @@ export interface Job {
   description: string;
   callCount: number;
 }
+
+export interface RegistryStatus {
+  minimumBotlerFee: BigNumber;
+  registrationFee: BigNumber;
+  executionFee: BigNumber;
+  adminFee: BigNumber;
+  accumulatedAdminFee: BigNumber;
+  jobListLength: number;
+  tokenAddress: string;
+  rewardContract: string;
+}

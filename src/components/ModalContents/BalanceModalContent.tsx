@@ -1,6 +1,7 @@
 import { css } from "@emotion/css";
 import BigNumber from "bignumber.js";
 import { ChangeEvent, useState } from "react";
+import { GAS_LIMIT } from "../../constants";
 import { registryContract } from "../../contracts/contracts";
 import { useBalance } from "../../hooks/useBalance";
 import { useWallet } from "../../hooks/useWallet";
@@ -73,25 +74,34 @@ export function BalanceModalContent({
     }
 
     if (isAdd) {
-      await registryContract.methods
-        .deposit(jobAddress)
-        .send({ from: wallet.address, value: amount.toString() })
-        .on("receipt", (receipt: any) => {
-          console.log(receipt);
-        })
-        .on("error", console.error);
+      try {
+        await registryContract.methods
+          .deposit(jobAddress)
+          .send({
+            from: wallet.address,
+            value: amount.toString(),
+            gas: GAS_LIMIT.default,
+          })
+          .on("receipt", (receipt: any) => {
+            console.log(receipt);
+          })
+          .on("error", console.error);
+      } catch {}
 
       close();
       return;
     }
 
-    await registryContract.methods
-      .withdraw(jobAddress, amount.toString())
-      .send({ from: wallet.address })
-      .on("receipt", (receipt: any) => {
-        console.log(receipt);
-      })
-      .on("error", console.error);
+    try {
+      await registryContract.methods
+        .withdraw(jobAddress, amount.toString())
+        .send({ from: wallet.address, gas: GAS_LIMIT.default })
+        .on("receipt", (receipt: any) => {
+          console.log(receipt);
+        })
+        .on("error", console.error);
+    } catch {}
+
     close();
   };
 

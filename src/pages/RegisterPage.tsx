@@ -5,9 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { PrimaryButton } from "../components/Button";
 import { Column, Row } from "../components/Layouts";
 import { Section } from "../components/Section";
+import { GAS_LIMIT } from "../constants";
 import { registryContract } from "../contracts/contracts";
+import { useRegistryStatus } from "../hooks/useRegistryStatus";
 import { useWallet } from "../hooks/useWallet";
 import { routes } from "../routes";
+import { formatTokenAmount } from "../utils/bignumber";
 
 const itemTitleTextCSS = css`
   font-size: 14px;
@@ -32,6 +35,8 @@ export function RegisterPage() {
   const { wallet } = useWallet();
   const navigate = useNavigate();
 
+  const { data: registryStatus } = useRegistryStatus();
+
   const [jobRegistered, setJobRegistered] = useState(false);
   const [txHash, setTxHash] = useState("");
 
@@ -41,10 +46,10 @@ export function RegisterPage() {
   const [description, setDescription] = useState("");
   const [valueStr, setValueStr] = useState("");
 
-  const botlerFee = new BigNumber(botlerFeeStr).times(
+  const botlerFee = new BigNumber(botlerFeeStr || "0").times(
     new BigNumber(10).pow(18)
   );
-  const value = new BigNumber(valueStr).times(new BigNumber(10).pow(18));
+  const value = new BigNumber(valueStr || "0").times(new BigNumber(10).pow(18));
 
   const handleChangeInput = (
     e: ChangeEvent<HTMLInputElement>,
@@ -69,19 +74,18 @@ export function RegisterPage() {
     if (!wallet || !wallet.isValid) return;
 
     try {
-      await registryContract.methods
+      const receipt = await registryContract.methods
         .registerJob(address, name, description, botlerFee?.toString() || "0")
-        .send({ from: wallet.address, value: value?.toString() || "0" })
-        .on("transactionHash", (hash: string) => {
-          setTxHash(hash);
-        })
-        .on("receipt", (receipt: any) => {
-          console.log(receipt);
-        })
-        .on("error", console.error);
-    } catch {}
+        .send({
+          from: wallet.address,
+          value: value?.toString() || "0",
+          gas: GAS_LIMIT.default,
+        });
 
-    setJobRegistered(true);
+      setTxHash(receipt.senderTxHash);
+
+      setJobRegistered(true);
+    } catch {}
   };
 
   return (
@@ -281,11 +285,16 @@ export function RegisterPage() {
                 >
                   <Row style={{ justifyContent: "space-between" }}>
                     <span>Initial deposit</span>
-                    <span>{valueStr || "0"} KLAY</span>
+                    <span>{formatTokenAmount(value)} KLAY</span>
                   </Row>
                   <Row style={{ justifyContent: "space-between" }}>
                     <span>Registration Fee</span>
-                    <span>XXX KLAY</span>
+                    <span>
+                      {formatTokenAmount(
+                        registryStatus?.registrationFee || new BigNumber(0)
+                      )}{" "}
+                      KLAY
+                    </span>
                   </Row>
                 </Column>
                 <Column>
@@ -303,7 +312,12 @@ export function RegisterPage() {
                       fontWeight: 700,
                     }}
                   >
-                    XXXXX KLAY
+                    {formatTokenAmount(
+                      value.plus(
+                        registryStatus?.registrationFee || new BigNumber(0)
+                      )
+                    )}{" "}
+                    KLAY
                   </Row>
                 </Column>
                 <Row

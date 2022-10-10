@@ -5,5 +5,7 @@ export function compareBigNumber(a: BigNumber, b: BigNumber) {
 }
 
 export function formatTokenAmount(amount: BigNumber) {
-  return amount.div(new BigNumber(10).pow(18)).toString();
+  return amount
+    .div(new BigNumber(10).pow(18))
+    .toFormat(6, BigNumber.ROUND_FLOOR);
 }
