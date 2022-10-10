@@ -6,7 +6,10 @@ import {
 import RegistryABI from "./abis/Registry.abi.json";
 import RewardABI from "./abis/Reward.abi.json";
 
-export const caver = new Caver(window.klaytn);
+export const caver = new Caver(
+  window.klaytn ||
+    new Caver.providers.HttpProvider("https://api.baobab.klaytn.net:8651")
+);
 
 export const registryContract = new caver.klay.Contract(
   RegistryABI as any,
