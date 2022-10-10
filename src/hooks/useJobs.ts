@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
 import useSWR from "swr";
+import { REFRESH_INTERVAL } from "../constants";
 import { registryContract } from "../contracts/contracts";
 import { Job } from "../types/types";
 import { useRegistryStatus } from "./useRegistryStatus";
@@ -27,7 +28,8 @@ export function useJobs() {
   const { data: registryStatus } = useRegistryStatus();
   const { data, mutate } = useSWR(
     "jobs",
-    () => registryStatus && fetchJobs(registryStatus.jobListLength)
+    () => registryStatus && fetchJobs(registryStatus.jobListLength),
+    { refreshInterval: REFRESH_INTERVAL.jobs }
   );
 
   const getJobDetail = (jid?: string) => {

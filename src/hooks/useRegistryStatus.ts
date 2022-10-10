@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
 import useSWR from "swr";
+import { REFRESH_INTERVAL } from "../constants";
 import { registryContract } from "../contracts/contracts";
 import { RegistryStatus } from "../types/types";
 
@@ -17,7 +18,9 @@ async function fetchRegistryStatus(): Promise<RegistryStatus> {
 }
 
 export function useRegistryStatus() {
-  const { data, mutate } = useSWR("registryStatus", fetchRegistryStatus);
+  const { data, mutate } = useSWR("registryStatus", fetchRegistryStatus, {
+    refreshInterval: REFRESH_INTERVAL.registryStatus,
+  });
 
   return { data, mutate };
 }

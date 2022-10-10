@@ -262,18 +262,12 @@ export function JobsPage() {
                   margin-top: 8px;
                   gap: 4px;
                   align-items: center;
+                  cursor: pointer;
                 `}
                 style={{ width: "fit-content" }}
+                onClick={() => setShowActiveOnly((prev) => !prev)}
               >
-                <CheckBox
-                  checked={showActiveOnly}
-                  onChange={() =>
-                    setShowActiveOnly((prev) => {
-                      console.log(prev);
-                      return !prev;
-                    })
-                  }
-                />
+                <CheckBox checked={showActiveOnly} />
                 <span
                   className={css`
                     font-size: 14px;
@@ -297,6 +291,17 @@ export function JobsPage() {
               ))}
             </div>
           </Column>
+          {!showMyJobOnly && filteredData.length === 0 && (
+            <Row
+              className={css`
+                padding: 120px 0;
+                justify-content: center;
+                color: #a7a7a7;
+              `}
+            >
+              Loading jobs...
+            </Row>
+          )}
           {!wallet && showMyJobOnly && (
             <Row
               className={css`

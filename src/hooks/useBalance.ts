@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
 import useSWR from "swr";
+import { REFRESH_INTERVAL } from "../constants";
 import { caver } from "../contracts/contracts";
 import { useWallet } from "./useWallet";
 
@@ -16,7 +17,7 @@ export function useBalance() {
     ["/balance", wallet?.address],
     () => wallet && fetchBalance(wallet.address),
     {
-      refreshInterval: 5000,
+      refreshInterval: REFRESH_INTERVAL.balance,
     }
   );
 

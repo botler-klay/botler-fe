@@ -42,3 +42,10 @@ export interface RegistryStatus {
   tokenAddress: string;
   rewardContract: string;
 }
+
+export interface Reward {
+  claimedKlay: BigNumber;
+  vestedKlay: BigNumber;
+  claimedToken: BigNumber;
+  vestedToken: BigNumber;
+}

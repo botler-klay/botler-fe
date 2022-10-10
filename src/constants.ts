@@ -9,3 +9,10 @@ export const REWARD_CONTRACT_ADDRESS =
 export enum GAS_LIMIT {
   default = 8000000,
 }
+
+export enum REFRESH_INTERVAL {
+  jobs = 5000,
+  balance = 5000,
+  default = 10000,
+  registryStatus = 30000,
+}

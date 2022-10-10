@@ -3,6 +3,7 @@ import { useRecoilState } from "recoil";
 import { BAOBAB_NETWORK_VERSION } from "../constants";
 import { walletAtom } from "../recoil/atoms";
 import { getKaikasProvider } from "../utils/kaikas";
+import { useReward } from "./useReward";
 
 export function useWallet() {
   const [wallet, setWallet] = useRecoilState(walletAtom);
@@ -42,6 +43,7 @@ export function useWallet() {
 
 export function useWalletEvent() {
   const [wallet, setWallet] = useRecoilState(walletAtom);
+  const { mutate: mutateReward } = useReward();
 
   useEffect(() => {
     if (!wallet || !wallet.isValid) return;
@@ -71,4 +73,8 @@ export function useWalletEvent() {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet?.networkVersion]);
+
+  useEffect(() => {
+    mutateReward();
+  }, [wallet]);
 }

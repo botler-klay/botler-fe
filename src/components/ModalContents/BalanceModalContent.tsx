@@ -75,32 +75,32 @@ export function BalanceModalContent({
 
     if (isAdd) {
       try {
-        await registryContract.methods
+        const receipt = await registryContract.methods
           .deposit(jobAddress)
           .send({
             from: wallet.address,
             value: amount.toString(),
             gas: GAS_LIMIT.default,
-          })
-          .on("receipt", (receipt: any) => {
-            console.log(receipt);
-          })
-          .on("error", console.error);
-      } catch {}
+          });
+
+        console.log(receipt);
+      } catch (e) {
+        console.error(e);
+      }
 
       close();
       return;
     }
 
     try {
-      await registryContract.methods
+      const receipt = await registryContract.methods
         .withdraw(jobAddress, amount.toString())
-        .send({ from: wallet.address, gas: GAS_LIMIT.default })
-        .on("receipt", (receipt: any) => {
-          console.log(receipt);
-        })
-        .on("error", console.error);
-    } catch {}
+        .send({ from: wallet.address, gas: GAS_LIMIT.default });
+
+      console.log(receipt);
+    } catch (e) {
+      console.error(e);
+    }
 
     close();
   };

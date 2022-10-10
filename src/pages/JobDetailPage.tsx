@@ -63,29 +63,33 @@ export function JobDetailPage() {
   const handleActivateJob = async () => {
     if (!wallet || !wallet.isValid) return;
 
-    await registryContract.methods
-      .activateJob(address)
-      .send({ from: wallet.address, gas: GAS_LIMIT.default })
-      .on("receipt", (receipt: any) => {
-        console.log(receipt);
-        setIsOpen(false);
-        mutate();
-      })
-      .on("error", console.error);
+    try {
+      const receipt = await registryContract.methods
+        .activateJob(address)
+        .send({ from: wallet.address, gas: GAS_LIMIT.default });
+
+      console.log(receipt);
+      setIsOpen(false);
+      mutate();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const handleDeactivateJob = async () => {
     if (!wallet || !wallet.isValid) return;
 
-    await registryContract.methods
-      .deactivateJob(address)
-      .send({ from: wallet.address, gas: GAS_LIMIT.default })
-      .on("receipt", (receipt: any) => {
-        console.log(receipt);
-        setIsOpen(false);
-        mutate();
-      })
-      .on("error", console.error);
+    try {
+      const receipt = await registryContract.methods
+        .deactivateJob(address)
+        .send({ from: wallet.address, gas: GAS_LIMIT.default });
+
+      console.log(receipt);
+      setIsOpen(false);
+      mutate();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
