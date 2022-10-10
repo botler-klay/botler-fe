@@ -76,5 +76,5 @@ export function useWalletEvent() {
 
   useEffect(() => {
     mutateReward();
-  }, [wallet]);
+  }, [wallet, mutateReward]);
 }
