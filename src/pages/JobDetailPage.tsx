@@ -1,5 +1,6 @@
 import { css } from "@emotion/css";
-import { useState } from "react";
+import BigNumber from "bignumber.js";
+import { ChangeEvent, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Column, Row } from "../components/Layouts";
 import { Modal } from "../components/Modal";
@@ -40,6 +41,12 @@ export function JobDetailPage() {
   const { wallet } = useWallet();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [changeFeeMode, setChangeFeeMode] = useState(false);
+  const [changeFeeValueStr, setChangeFeeValueStr] = useState("");
+
+  const changeFeeValue = new BigNumber(changeFeeValueStr || "0").times(
+    new BigNumber(10).pow(18)
+  );
 
   const jobDetail = getJobDetail(jid);
 
@@ -58,6 +65,7 @@ export function JobDetailPage() {
     active,
     description,
     callCount,
+    jobOwner,
   } = jobDetail;
 
   const handleActivateJob = async () => {
@@ -92,6 +100,42 @@ export function JobDetailPage() {
     }
   };
 
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const strVal = e.target.value;
+
+    if (!strVal) {
+      setChangeFeeValueStr("");
+
+      return;
+    }
+
+    const bigNumVal = new BigNumber(strVal).times(new BigNumber(10).pow(18));
+
+    if (!bigNumVal.isNaN()) {
+      setChangeFeeValueStr(strVal);
+    }
+  };
+
+  const handleChangeFee = async () => {
+    if (!wallet || !wallet.isValid) return;
+
+    try {
+      const receipt = await registryContract.methods
+        .changeJobBotlerFee(address, changeFeeValue.toString())
+        .send({ from: wallet.address, gas: GAS_LIMIT.default });
+
+      console.log(receipt);
+
+      setChangeFeeMode(false);
+
+      mutate();
+    } catch (e) {
+      console.error(e);
+
+      setChangeFeeMode(false);
+    }
+  };
+
   return (
     <Section style={{ marginTop: 32 }}>
       <Column
@@ -111,9 +155,24 @@ export function JobDetailPage() {
         </Row>
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Status</span>
-          <span className={rowValueTextCSS}>
-            {active ? "Active" : "Inactive"}
-          </span>
+          <Row style={{ width: "fit-content", position: "relative" }}>
+            <span className={rowValueTextCSS}>
+              {active ? "Active" : "Inactive"}
+            </span>
+            {active && (
+              <img
+                src="/assets/images/tabSelectedDot.svg"
+                alt=""
+                width="6px"
+                style={{
+                  position: "absolute",
+                  right: -10,
+                  top: "50%",
+                  transform: "translate(0, -50%)",
+                }}
+              />
+            )}
+          </Row>
         </Row>
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Job Address</span>
@@ -133,7 +192,7 @@ export function JobDetailPage() {
           <Row style={{ gap: 16, width: "fit-content" }}>
             <span className={rowTitleTextCSS}>Balance</span>
             <span className={rowValueTextCSS}>
-              {formatTokenAmount(balance)}
+              {formatTokenAmount(balance)} KLAY
             </span>
           </Row>
           <button
@@ -167,16 +226,71 @@ export function JobDetailPage() {
             {description}
           </span>
         </Row>
-        <Row style={{ gap: 16 }}>
+        <Row style={{ gap: 16, alignItems: "center" }}>
           <span className={rowTitleTextCSS}>Botler Fee</span>
-          <span className={rowValueTextCSS}>
-            {formatTokenAmount(botlerFee)}
-          </span>
+          {changeFeeMode ? (
+            <Row style={{ width: "fit-content", gap: 8 }}>
+              <div style={{ position: "relative" }}>
+                <input
+                  className={css`
+                    border: 1px solid #404040;
+                    background-color: transparent;
+                    color: white;
+                  `}
+                  value={changeFeeValueStr}
+                  onChange={handleChangeInput}
+                />
+                <span
+                  className={css`
+                    position: absolute;
+                    right: 4px;
+                    top: 50%;
+                    transform: translate(0, -50%);
+                    color: #cacaca;
+                    font-size: 12px;
+                    line-height: 12px;
+                  `}
+                >
+                  KLAY
+                </span>
+              </div>
+              <button onClick={() => setChangeFeeMode(false)}>
+                <img
+                  src="/assets/images/red_times.svg"
+                  alt="cancel"
+                  width="10px"
+                />
+              </button>
+              <button onClick={handleChangeFee}>
+                <img
+                  src="/assets/images/green_check.svg"
+                  alt="confirm"
+                  width="10px"
+                />
+              </button>
+            </Row>
+          ) : (
+            <Row style={{ width: "fit-content", gap: 8 }}>
+              <span className={rowValueTextCSS}>
+                {formatTokenAmount(botlerFee)} KLAY
+              </span>
+              {wallet?.isValid &&
+                jobOwner.toLowerCase() === wallet.address.toLowerCase() && (
+                  <button onClick={() => setChangeFeeMode(true)}>
+                    <img
+                      src="/assets/images/pencil.svg"
+                      alt="edit"
+                      width="8px"
+                    />
+                  </button>
+                )}
+            </Row>
+          )}
         </Row>
         <Row style={{ gap: 16 }}>
           <span className={rowTitleTextCSS}>Accumulated Fee</span>
           <span className={rowValueTextCSS}>
-            {formatTokenAmount(accumulatedFee)}
+            {formatTokenAmount(accumulatedFee)} KLAY
           </span>
         </Row>
         <Row style={{ gap: 16 }}>
